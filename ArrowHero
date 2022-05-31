@@ -1,4 +1,4 @@
-package homework;
+package unit6;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -13,7 +13,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.util.*;
 
 
-public class test extends JPanel implements MouseListener, KeyListener, Runnable {
+public class arrowhero extends JPanel implements MouseListener, KeyListener, Runnable {
 	public static int gameState = 0; //game states
 	public static int mouseX; //gets position of x 
 	public static int mouseY; //gets position of y
@@ -26,10 +26,10 @@ public class test extends JPanel implements MouseListener, KeyListener, Runnable
 	BufferedImage image2; //object image(s) but not done yet
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		JFrame myFrame = new JFrame("Test");
+		JFrame myFrame = new JFrame("Arrowhero");
 		
 		// Create a panel to put inside the frame
-		test myPanel = new test(); 
+		arrowhero myPanel = new arrowhero(); 
 		myFrame.add(myPanel);
 		
 		// Maximize your frame to the size of the panel
@@ -41,7 +41,7 @@ public class test extends JPanel implements MouseListener, KeyListener, Runnable
 		
 	}
 	
-	public test() {
+	public arrowhero() {
 		setPreferredSize(new Dimension(680,928)); //320, 240   b288.5, 213
 		setBackground(new Color(255,255,255));
 		this.setFocusable(true);
