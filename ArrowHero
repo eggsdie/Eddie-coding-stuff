@@ -65,8 +65,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		addKeyListener(this);
 		try {
 			
-			menuScreen = ImageIO.read(new File("Arrow_Master_1.png"));
-			gameScreen = ImageIO.read(new File("ArrowHeroGameScreen.png"));
+			menuScreen = ImageIO.read(new File("menuscreen.png"));
+			gameScreen = ImageIO.read(new File("gamescreen.png"));
 			images = new BufferedImage [5];
 			images[2] = ImageIO.read(new File("arrowup.png"));
 			images[4] = ImageIO.read(new File("arrowdown.png"));
@@ -92,7 +92,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		if (gameState == 0) {
 			g.drawImage(menuScreen, 0, 0, null);
 		} else if (gameState == 1) {
-			g.drawImage(gameScreen, -550, -100, null);
+			g.drawImage(gameScreen, 0, 0, null);
 			
 		
 			// g.drawImage(menuScree, 0, 0, 800, 800, this);
