@@ -13,7 +13,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.util.*;
 
 
-public class arrowhero extends JPanel implements MouseListener, KeyListener, Runnable {
+public class test extends JPanel implements MouseListener, KeyListener, Runnable {
 	public static int gameState = 0; //game states
 	public static int mouseX; //gets position of x 
 	public static int mouseY; //gets position of y
@@ -26,10 +26,10 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	BufferedImage image2; //object image(s) but not done yet
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		JFrame myFrame = new JFrame("Arrowhero");
+		JFrame myFrame = new JFrame("Test");
 		
 		// Create a panel to put inside the frame
-		arrowhero myPanel = new arrowhero(); 
+		test myPanel = new test(); 
 		myFrame.add(myPanel);
 		
 		// Maximize your frame to the size of the panel
@@ -41,13 +41,13 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		
 	}
 	
-	public arrowhero () {
-		setPreferredSize(new Dimension(640,480)); //320, 240   b288.5, 213
+	public test() {
+		setPreferredSize(new Dimension(680,928)); //320, 240   b288.5, 213
 		setBackground(new Color(255,255,255));
 		this.setFocusable(true);
 		addKeyListener(this);
 		try {
-			menuScreen = ImageIO.read(new File("arrowheromenu.png"));
+			menuScreen = ImageIO.read(new File("Arrow_Master_1.png"));
 			image2 = ImageIO.read(new File("mario.png"));
 		}
 		catch (Exception e) {
@@ -144,7 +144,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		mouseX = e.getX();
 		mouseY = e.getY();
 		if (gameState == 0) {
-			if (0 <= mouseX && mouseX <= 680 && 0 <= mouseY && mouseY <= 480) {
+			if (0 <= mouseX && mouseX <= 680 && 0 <= mouseY && mouseY <= 928) {
 				gameState = 1;
 				paintComponent(this.getGraphics());
 			}
