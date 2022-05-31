@@ -1,5 +1,4 @@
-
-package unit6;
+package homework;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,15 +14,16 @@ import java.util.*;
 
 
 public class arrowhero extends JPanel implements MouseListener, KeyListener, Runnable {
-	public static int gameState = 0;
-	public static int mouseX;
-	public static int mouseY;
-	public static int health = 100;
-	public static int angle = -90;
-	public static int count = 1;
-	public static int counter = 1800;
-	BufferedImage menuScreen;
-	BufferedImage image2;
+	public static int gameState = 0; //game states
+	public static int mouseX; //gets position of x 
+	public static int mouseY; //gets position of y
+	public static int health = 100; // health of player
+	public static int angle = -90; // angle of the rotating object starts at -90 since we need the object to start at the top of the screen, and when I tried
+	//90 it went to the bottom so I tried -90 and it worked so im keeping it at that
+	public static int count = 1; // this variable is to make the object move faster and faster, it is used along counter in order to make the object move faster after a certain ammount of spins
+	public static int counter = 1800; // using count, i subtract counter form count, and since count gets bigger every angle, it will take approxipately, counter/360 spins before the object moves faster
+	BufferedImage menuScreen; //menu screen image
+	BufferedImage image2; //object image(s) but not done yet
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		JFrame myFrame = new JFrame("Arrowhero");
@@ -47,7 +47,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		this.setFocusable(true);
 		addKeyListener(this);
 		try {
-			//menuScreen = ImageIO.read(new File("arrowheromenu.png"));
+			menuScreen = ImageIO.read(new File("arrowheromenu.png"));
 			image2 = ImageIO.read(new File("mario.png"));
 		}
 		catch (Exception e) {
@@ -79,7 +79,6 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.drawImage(menuScreen, 0, 0, null);
 		}
 		else if (gameState==1) {
-			while (health > 0) {
 				super.paintComponent(g);
 				//g.drawImage(menuScreen, 0, 0, 800, 800, this);
 				angle-=count;
@@ -90,7 +89,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 					counter=1800;
 				}
 				
-			}
+				
 		}
 		
 		
@@ -104,11 +103,15 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			try
 			{	
 				Thread.sleep(16); // The commands after while(true) but before try will execute once every 80 milliseconds
+				if(health < 0) {
+					gameState = 2;
+				}
 			}
 			catch(Exception e)
 			{
 				e.printStackTrace();
 			}
+			
 		}
 	}
 	@Override
@@ -141,7 +144,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		mouseX = e.getX();
 		mouseY = e.getY();
 		if (gameState == 0) {
-			if (84 <= mouseX && mouseX <= 244 && 211 <= mouseY && mouseY <= 269) {
+			if (0 <= mouseX && mouseX <= 680 && 0 <= mouseY && mouseY <= 480) {
 				gameState = 1;
 				paintComponent(this.getGraphics());
 			}
@@ -171,4 +174,3 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	//y pos is the radius * sine of the angle
 
 }
-
