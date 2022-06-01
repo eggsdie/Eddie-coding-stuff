@@ -98,8 +98,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			for(int i=0; i <arrows.size(); i++) {
 				System.out.println(arrows.get(i).position);
 				arrows.get(i).position -= count;
-				g.drawImage(images[arrows.get(i).type], (int) (25 + 200 * Math.cos(arrows.get(i).position * Math.PI / 180)),
-						(int) (100 + 200 * Math.sin(arrows.get(i).position * Math.PI / 180)), this);
+				g.drawImage(images[arrows.get(i).type], (int) (175 + 200 * Math.cos(arrows.get(i).position * Math.PI / 180)),
+						(int) (200 + 200 * Math.sin(arrows.get(i).position * Math.PI / 180)), this);
 
 			}
 			counter -= count;
