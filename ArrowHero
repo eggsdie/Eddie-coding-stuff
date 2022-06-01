@@ -20,15 +20,15 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static int health = 100; // health of player
 	public static int angle = -91; // angle of the rotating object starts at -90 since we need the object to start
 									// at the top of the screen, and when I tried
-	// 90 it went to the bottom so I tried -90 and it worked so im keeping it at
-	// that
+									// 90 it went to the bottom so I tried -90 and it worked so i'm keeping it at
+									// that
 	public static int count = 1; // this variable is to make the object move faster and faster, it is used along
-									// counter in order to make the object move faster after a certain ammount of
+									// counter in order to make the object move faster after a certain amount of
 									// spins
 	public static int counter = 1800; // using count, i subtract counter form count, and since count gets bigger every
 										// angle, it will take approxipately, counter/360 spins before the object moves
 										// faster
-	public static int arrow = 0;// variable for which arrowkey
+	public static int arrow = 0;// variable for which arrow ey
 	public static LinkedList<Arrow> arrows = new LinkedList<Arrow>(); // 1, 4, 3, 2, 1, 1, 2
 	public static int time = 300;
 	public static int spawnTime = 300;
@@ -44,7 +44,6 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static BufferedImage [] images;
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		JFrame myFrame = new JFrame("Arrowhero");
 
 		// Create a panel to put inside the frame
@@ -59,7 +58,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	}
 
 	public arrowhero() {
-		setPreferredSize(new Dimension(680,928)); // 320, 240 b288.5, 213
+		setPreferredSize(new Dimension(500,682)); // 320, 240 b288.5, 213
 		setBackground(new Color(0, 0, 0));
 		this.setFocusable(true);
 		addKeyListener(this);
@@ -81,9 +80,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		Thread thread = new Thread(this);
 		thread.start();
 		// game states
-		// 1 menu screen ( menu, cosmetics, keybinds)
-		// 2 game screen
-		// win/lose screen
+		// 0 menu screen ( menu, cosmetics, keybinds)
+		// 1 game screen
+		// 2 win/lose screen
 	}
 
 
@@ -95,7 +94,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.drawImage(gameScreen, 0, 0, null);
 			
 		
-			// g.drawImage(menuScree, 0, 0, 800, 800, this);
+			// g.drawImage(menuScreen, 0, 0, 800, 800, this);
 			for(int i=0; i <arrows.size(); i++) {
 				System.out.println(arrows.get(i).position);
 				arrows.get(i).position -= count;
@@ -189,7 +188,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		mouseX = e.getX();
 		mouseY = e.getY();
 		if (gameState == 0) {
-			if (0 <= mouseX && mouseX <= 680 && 0 <= mouseY && mouseY <= 928) {
+			if (0 <= mouseX && mouseX <= 500 && 0 <= mouseY && mouseY <= 682) {
 				gameState = 1;
 				paintComponent(this.getGraphics());
 			}
