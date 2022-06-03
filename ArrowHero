@@ -12,6 +12,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.util.*;
+import java.util.Scanner;
 
 public class arrowhero extends JPanel implements MouseListener, KeyListener, Runnable {
 	public static int gameState = 0; // game states
@@ -38,16 +39,18 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static int windowWidth= 680;
 	public static int windowHeight = 928;
 	public static int maxSpeed = 10;
-	BufferedImage gameScreen;
-	BufferedImage menuScreen; // menu screen image
-	BufferedImage arrowup; // object image(s) but not done yet
-	BufferedImage arrowdown; // object image(s) but not done yet
-	BufferedImage arrowleft; // object image(s) but not done yet
-	BufferedImage arrowright; // object image(s) but not done yet
+	public static int currentscore = 0; // <- temporary
+	public static String highscore;
+	public static BufferedImage settings;
+	public static BufferedImage heart;
+	public static BufferedImage arrowup; // object image(s) but not done yet
+	public static BufferedImage arrowdown; // object image(s) but not done yet
+	public static BufferedImage arrowleft; // object image(s) but not done yet
+	public static BufferedImage arrowright; // object image(s) but not done yet
 	public static BufferedImage [] images;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+	public static void main(String[] args) throws IOException {
+		
 		JFrame myFrame = new JFrame("Arrowhero");
 
 		// Create a panel to put inside the frame
@@ -59,6 +62,11 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 
 		// Set the visibility of the frame to visible
 		myFrame.setVisible(true);
+		
+		Scanner inputFile = new Scanner(new File("highscore.txt"));
+		highscore = inputFile.nextLine();
+		inputFile.close();
+		
 	}
 
 	public arrowhero() {
@@ -68,13 +76,13 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		addKeyListener(this);
 		try {
 			
-			menuScreen = ImageIO.read(new File("menuscreen.png"));
-			gameScreen = ImageIO.read(new File("gamescreen.png"));
+			settings = ImageIO.read(new File("settingsicon.jpg"));
+			heart = ImageIO.read(new File("heart.png"));
 			images = new BufferedImage [5];
-			images[2] = ImageIO.read(new File("arrowup.png"));
-			images[4] = ImageIO.read(new File("arrowdown.png"));
-			images[1] = ImageIO.read(new File("arrowleft.png"));
-			images[3] = ImageIO.read(new File("arrowright.png"));
+			images[2] = ImageIO.read(new File("up.png"));
+			images[4] = ImageIO.read(new File("down.png"));
+			images[1] = ImageIO.read(new File("left.png"));
+			images[3] = ImageIO.read(new File("right.png"));
 			
 		} catch (Exception e) {
 			System.out.println("no image");
@@ -84,7 +92,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		Thread thread = new Thread(this);
 		thread.start();
 		// game states
-		// 1 menu screen ( menu, cosmetics, keybinds)
+		// 1 menu screen ( menu, cosmetics, key binds)
 		// 2 game screen
 		// win/lose screen
 	}
@@ -93,17 +101,73 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 
 	public void paintComponent(Graphics g) {
 		if (gameState == 0) {
-			g.drawImage(menuScreen, 0, 0, null);
-		} else if (gameState == 1) {
-			g.drawImage(gameScreen, 0, 0, null);
 			
+			// Background
+			super.paintComponent(g);
+			
+			// Title
+			g.setColor(new Color(255,255,255));
+			g.setFont(new Font("Courier", Font.BOLD, 40));
+			g.drawString("Arrow master", 115, 100);
+			
+			// Instructions
+			g.setColor(new Color(255,255,255));
+			g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+			g.drawString("Press a key to begin!", 175, 500);
+			
+			// Arrows
+			g.drawImage(images[2], 220, 320, null);
+			g.drawImage(images[4], 220, 400, null);
+			g.drawImage(images[1], 140, 400, null);
+			g.drawImage(images[3], 300, 400, null);
+			
+			// Settings
+			g.drawImage(settings, 10, 630, null);
+			
+			// High Score
+			g.setColor(new Color(220,220,220));
+			g.setFont(new Font("Courier", Font.PLAIN, 15));
+			g.drawString("Highscore: " + highscore, 190, 575);
+			
+		} else if (gameState == 1) {
+			
+			// Background
+			super.paintComponent(g);
+			
+			// Circle at the top
+			g.setColor(new Color(255,0,0));
+			g.fillArc(200, 25, 100, 100, 45, 90);
+			g.setColor(new Color(0,128,255));
+			g.fillArc(200, 25, 100, 100, 315, 90);
+			g.setColor(new Color(0,255,0));
+			g.fillArc(200, 25, 100, 100, 135, 90);
+			g.setColor(new Color(255,255,0));
+			g.fillArc(200, 25, 100, 100, 225, 90);
+			g.setColor(new Color(0,0,0));
+			g.fillOval(208, 33, 84, 84);
+			
+			// Health Bar
+			g.drawImage(heart, 25, 570, null);
+			g.setColor(new Color(107,0,0));
+			g.fillRect(75, 575, 400, 30);
+			g.setColor(new Color(0,0,0));
+			g.fillRect(79, 579, 392, 22);
+			g.setColor(new Color(186,0,0));
+			g.fillRect(79, 579, 392, 22);
+			
+			// Current Score Display
+			g.setColor(new Color(220,220,220));
+			g.setFont(new Font("Courier", Font.PLAIN, 15));
+			g.drawString("Score: " + currentscore, 215, 640);
+		
+					
 			System.out.println("TEST");
 			// g.drawImage(menuScree, 0, 0, 800, 800, this);
 			for(int i=0; i <arrows.size(); i++) {
 				System.out.println(arrows.get(i).position);
 				arrows.get(i).position -= count;
-				g.drawImage(images[arrows.get(i).type], (int) (175 + 200 * Math.cos(arrows.get(i).position * Math.PI / 180)),
-						(int) (215 + 200 * Math.sin(arrows.get(i).position * Math.PI / 180)), this);
+				g.drawImage(images[arrows.get(i).type], (int) (215 + 200 * Math.cos(arrows.get(i).position * Math.PI / 180)),
+						(int) (235 + 200 * Math.sin(arrows.get(i).position * Math.PI / 180)), this);
 
 			}
 			counter -= count;
