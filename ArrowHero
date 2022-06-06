@@ -33,12 +33,12 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static LinkedList<Arrow> arrows = new LinkedList<Arrow>(); // 1, 4, 3, 2, 1, 1, 2
 	public static int time = 31;
 	public static int spawnTime = 31;//500/16ms to get 2 per second
-	public static int decrease = 2;
+	public static int decrease = 4;
 	public static int scoreAddition = 0;
 	public static int windowWidth= 680;
 	public static int windowHeight = 928;
 	public static int healthIncrease = 1;
-	public static int maxSpeed = 10;
+	public static int maxSpeed = 10; //not used currently
 	public static int currentscore = 0; // <- temporary
 	public static String highscore;
 	public static BufferedImage settings;
@@ -66,7 +66,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		// Set the visibility of the frame to visible
 		myFrame.setVisible(true);
 		inputFile = new Scanner(new File("highscore.txt"));
-		outputFile = new PrintWriter(new FileWriter("highscore.txt"));
+		outputFile = new PrintWriter(new FileWriter("highscore1.txt"));
 		
 		highscore = inputFile.nextLine();
 		
@@ -81,13 +81,15 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		addKeyListener(this);
 		try {
 			
-			settings = ImageIO.read(new File("settingsicon.jpg"));
+			settings = ImageIO.read(new File("settingsicon.jpeg"));
 			heart = ImageIO.read(new File("heart.png"));
 			images = new BufferedImage [5];
-			images[2] = ImageIO.read(new File("up.png"));
-			images[4] = ImageIO.read(new File("down.png"));
 			images[1] = ImageIO.read(new File("left.png"));
+			images[2] = ImageIO.read(new File("up.png"));
 			images[3] = ImageIO.read(new File("right.png"));
+			images[4] = ImageIO.read(new File("down.png"));
+			
+			
 			
 		} catch (Exception e) {
 			System.out.println("no image");
@@ -190,7 +192,11 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 
 		}
 		else if (gameState == 2) {
-			
+			g.setColor(new Color(255,255,255));
+			g.setFont(new Font("Courier", Font.BOLD, 20));
+			g.drawString("Great Job! You scored a total of " + currentscore, 50, 200);
+			g.drawString("Highscore: " + highscore, 75, 400);
+			g.drawString("Press space bar to restart", 75, 600);
 		}
 
 	}
@@ -219,7 +225,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 								
 							}
 							else {
-								health-=10;
+								health-=25;
 							}
 							arrows.poll();
 						}
@@ -228,6 +234,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 							if(currentscore > Integer.parseInt(highscore)) {
 								outputFile.print(currentscore);
 								outputFile.close();
+								
 							}
 						}
 
@@ -255,10 +262,27 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			}
 		}
 		// TODO Auto-generated method stub
-		if (e.getKeyCode() >= 37 && e.getKeyCode() <= 40) {
-			arrow = e.getKeyCode() - 36;
-			
+		if(gameState == 1) {
+			if (e.getKeyCode() >= 37 && e.getKeyCode() <= 40) {
+				arrow = e.getKeyCode() - 36;
+				
+			}
 		}
+		if(gameState == 2) {
+			if (e.getKeyCode()==32) {
+				count = 2;
+				counter = 1800; 
+				gameState = 1;
+				health = 392;
+				spawnTime = 31;//500/16ms to get 2 per second
+				decrease = 4;
+				scoreAddition = 0;
+				currentscore = 0;
+				time = 31;
+				healthIncrease = 1;
+			}
+		}
+		
 	}
 
 	@Override
