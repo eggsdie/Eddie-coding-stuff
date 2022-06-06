@@ -89,7 +89,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			images[3] = ImageIO.read(new File("right.png"));
 			images[4] = ImageIO.read(new File("down.png"));
 			
-			
+			 
 			
 		} catch (Exception e) {
 			System.out.println("no image");
@@ -198,6 +198,12 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.drawString("Highscore: " + highscore, 75, 400);
 			g.drawString("Press space bar to restart", 75, 600);
 		}
+		else if(gameState == 3) {
+			g.setColor(new Color(255,255,255));
+			g.setFont(new Font("Courier", Font.BOLD, 20));
+			g.drawString("Game Paused", 75, 400);
+			g.drawString("Press space bar to unpause", 75, 600);
+		}
 
 	}
 
@@ -237,6 +243,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 								
 							}
 						}
+						
 
 					
 					
@@ -263,10 +270,14 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		}
 		// TODO Auto-generated method stub
 		if(gameState == 1) {
+			if(e.getKeyCode() == 32) {
+				gameState = 3;
+			}
 			if (e.getKeyCode() >= 37 && e.getKeyCode() <= 40) {
 				arrow = e.getKeyCode() - 36;
 				
 			}
+			
 		}
 		if(gameState == 2) {
 			if (e.getKeyCode()==32) {
@@ -280,6 +291,11 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				currentscore = 0;
 				time = 31;
 				healthIncrease = 1;
+			}
+		}
+		if(gameState == 3) {
+			if(e.getKeyCode() == 32) {
+				gameState = 1;
 			}
 		}
 		
