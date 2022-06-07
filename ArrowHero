@@ -1,5 +1,6 @@
 package unit6;
 
+// Necessary Imports
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,42 +16,37 @@ import java.util.*;
 import java.util.Scanner;
 
 public class arrowhero extends JPanel implements MouseListener, KeyListener, Runnable {
+	
+	// Class Variables
+	
 	public static int gameState = 0; // game states
 	public static int mouseX; // gets position of x
 	public static int mouseY; // gets position of y
-	public static int health = 392; // health of player
+	public static int health = 392; // full health of player, 392 because that is the pixel length of used rectangle
 	public static int angle = -91; // angle of the rotating object starts at -90 since we need the object to start
-									// at the top of the screen, and when I tried
-	// 90 it went to the bottom so I tried -90 and it worked so im keeping it at
-	// that
-	public static int count = 2; // this variable is to make the object move faster and faster, it is used along
-									// counter in order to make the object move faster after a certain ammount of
-									// spins
-	public static int counter = 1800; // using count, i subtract counter form count, and since count gets bigger every
-										// angle, it will take approxipately, counter/360 spins before the object moves
-										// faster
+	public static int count = 2; 	// to make the object move faster and faster, it is used along
+				    	// counter in order to make the object move faster after a certain ammount of spins
+	public static int counter = 1800; 	// using count, i subtract counter form count, and since count gets bigger every
+						// angle, it will take approxipately, counter/360 spins before the object moves faster
 	public static int arrow = 0;// variable for which arrowkey
-	public static LinkedList<Arrow> arrows = new LinkedList<Arrow>(); // 1, 4, 3, 2, 1, 1, 2
-	public static int time = 31;
-	public static int spawnTime = 31;//500/16ms to get 2 per second
-	public static int decrease = 4;
-	public static int scoreAddition = 0;
-	public static int windowWidth= 680;
-	public static int windowHeight = 928;
-	public static int healthIncrease = 1;
-	public static int maxSpeed = 10; //not used currently
-	public static int currentscore = 0; // <- temporary
-	public static String highscore;
-	public static BufferedImage settings;
-	public static BufferedImage heart;
-	public static BufferedImage arrowup; // object image(s) but not done yet
-	public static BufferedImage arrowdown; // object image(s) but not done yet
-	public static BufferedImage arrowleft; // object image(s) but not done yet
-	public static BufferedImage arrowright; // object image(s) but not done yet
-	public static BufferedImage [] images;
-	public static Scanner inputFile;
-	public static PrintWriter outputFile;
-	
+	public static LinkedList<Arrow> arrows = new LinkedList<Arrow>(); // array of unlimited length to hold currently spinning arrows
+	public static int time = 31; // used to check how long has it been since last arrow spawned
+	public static int spawnTime = 31; //500/16ms to get 2 arrows per second
+	public static int decrease = 4; // used to decrease spawntime speed, making arrows spawn faster
+	public static int scoreAddition = 0; // amount of points given to the user after each successful arrow correlation
+	public static int healthIncrease = 1; // health given back to the user after points are acheived, if the bar is not already full
+	public static int maxSpeed = 10; // to set a max limit speed at which arrows can move
+	public static int currentscore = 0; // counting total score of the user in 1 run
+	public static String highscore; // keeping track of the highscore in a text file
+	public static BufferedImage settings; // settings icon
+	public static BufferedImage heart; // heart icon
+	public static BufferedImage arrowup; // up arrow
+	public static BufferedImage arrowdown; // down arrow
+	public static BufferedImage arrowleft; // left arrow
+	public static BufferedImage arrowright; // right arrow
+	public static BufferedImage [] images; // an array to store all arrow variations
+	public static Scanner inputFile; // scanner to read stored highscore
+	public static PrintWriter outputFile; // to stream the new highscore into the text file
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -68,6 +64,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		inputFile = new Scanner(new File("highscore.txt"));
 		outputFile = new PrintWriter(new FileWriter("highscore1.txt"));
 		
+		// Reading the user's highscore stored in text file
 		highscore = inputFile.nextLine();
 		
 		inputFile.close();
@@ -75,12 +72,16 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	}
 
 	public arrowhero() {
-		setPreferredSize(new Dimension(500,682)); // 320, 240 b288.5, 213
+		
+		// JPanel dimensions and colour
+		setPreferredSize(new Dimension(500,682));
 		setBackground(new Color(0, 0, 0));
+		
 		this.setFocusable(true);
 		addKeyListener(this);
+		
 		try {
-			
+			// Determining which images to use for declared BufferedImages
 			settings = ImageIO.read(new File("settingsicon.jpeg"));
 			heart = ImageIO.read(new File("heart.png"));
 			images = new BufferedImage [5];
@@ -89,24 +90,22 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			images[3] = ImageIO.read(new File("right.png"));
 			images[4] = ImageIO.read(new File("down.png"));
 			
-			 
-			
 		} catch (Exception e) {
 			System.out.println("no image");
 
 		}
+		
 		addMouseListener(this);
 		Thread thread = new Thread(this);
 		thread.start();
-		// game states
-		// 1 menu screen ( menu, cosmetics, key binds)
-		// 2 game screen
-		// win/lose screen
+		
 	}
 
 
 
 	public void paintComponent(Graphics g) {
+		
+		// Menu Screen
 		if (gameState == 0) {
 			
 			// Background
@@ -135,7 +134,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.setColor(new Color(220,220,220));
 			g.setFont(new Font("Courier", Font.PLAIN, 15));
 			g.drawString("Highscore: " + highscore, 190, 575);
-			
+		
+		// Game Screen
 		} else if (gameState == 1) {
 			
 			// Background
@@ -170,9 +170,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.setFont(new Font("Courier", Font.PLAIN, 15));
 			g.drawString("Score: " + currentscore, 215, 640);
 		
+			// Spawning Arrows
 			g.drawImage(images[arrow], 216,40,null);		
 			System.out.println("TEST");
-			// g.drawImage(menuScree, 0, 0, 800, 800, this);
 			for(int i=0; i <arrows.size(); i++) {
 				System.out.println(arrows.get(i).position);
 				arrows.get(i).position -= count;
@@ -180,7 +180,10 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 						(int) (235 + 200 * Math.sin(arrows.get(i).position * Math.PI / 180)), this);
 
 			}
+			
 			counter -= count;
+			
+			// Increasing Speed
 			if (counter < 0) {
 				//count = Math.min(maxSpeed, count+1);
 				count++;
@@ -189,8 +192,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				spawnTime-=decrease;
 				healthIncrease+=2;
 			}
-
 		}
+		
+		// Game Over Screen
 		else if (gameState == 2) {
 			g.setColor(new Color(255,255,255));
 			g.setFont(new Font("Courier", Font.BOLD, 20));
@@ -198,6 +202,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.drawString("Highscore: " + highscore, 75, 400);
 			g.drawString("Press space bar to restart", 75, 600);
 		}
+		
+		// Game Paused Screen
 		else if(gameState == 3) {
 			g.setColor(new Color(255,255,255));
 			g.setFont(new Font("Courier", Font.BOLD, 20));
@@ -207,68 +213,66 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 
 	}
 
-	@Override
 	public void run() {
 		while (true) {
 			repaint();
 			try {
-				Thread.sleep(16); // The commands after while(true) but before try will execute once every 80
-									// milliseconds
+			
+				Thread.sleep(16); // The commands after while(true) but before try will execute once every 80 milliseconds
 				
 				if (gameState == 1) {
+					
+					// Checking if a new arrow can spawn yet
 					if(time>=spawnTime) {
 						arrows.add(new Arrow(angle, ((int)(Math.random()*(4-1+1))+1)));
 						time = 0;
 					}
+					
 					time++;
-						if(!arrows.isEmpty()&& arrows.peek().position<=-440) {
-							if(arrows.peek().type == arrow) {
-								currentscore+= scoreAddition;
-								scoreAddition++;
-								if(health < 392) {
-									health+=healthIncrease;
-								}
-								
-							}
-							else {
-								health-=25;
-							}
-							arrows.poll();
-						}
-						if (health < 0) {
-							gameState = 2;
-							if(currentscore > Integer.parseInt(highscore)) {
-								outputFile.print(currentscore);
-								outputFile.close();
-								
-							}
-						}
-						
-
 					
+					// Giving score and health if entered arrow matches
+					if(!arrows.isEmpty()&& arrows.peek().position<=-440) {
+						if(arrows.peek().type == arrow) {
+							currentscore+= scoreAddition;
+							scoreAddition++;
+							if(health < 392) {
+								health+=healthIncrease;
+							}	
+						}
+						else {
+							health-=25;
+						}
+						arrows.poll(); // deleting the first value of the LinkedList, no that it has been checked
+					}
 					
+					// Game Over if the user runs out of health
+					if (health < 0) {
+						gameState = 2;
+						if(currentscore > Integer.parseInt(highscore)) {
+							outputFile.print(currentscore);
+							outputFile.close();			
+						}
+					}	
 				}
-			} catch (Exception e) {
+			}
+			
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 
 		}
 	}
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void keyPressed(KeyEvent e) {
+		
+		// Switching over to game screen if any key is pressed
 		if(gameState == 0) {
 			if(e.getKeyCode()>0) {
 				gameState =1;
 			}
 		}
-		// TODO Auto-generated method stub
+		
+		// Reading the entered arrow key of the user
 		if(gameState == 1) {
 			if(e.getKeyCode() == 32) {
 				gameState = 3;
@@ -279,6 +283,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			}
 			
 		}
+		
+		// Resetting all variables if Game Over
 		if(gameState == 2) {
 			if (e.getKeyCode()==32) {
 				count = 2;
@@ -293,6 +299,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				healthIncrease = 1;
 			}
 		}
+		
+		// Back to Game Screen from Pause Screen if space key is pressed
 		if(gameState == 3) {
 			if(e.getKeyCode() == 32) {
 				gameState = 1;
@@ -300,22 +308,24 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		}
 		
 	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+	
+	// Setting up arrow data structure
+	public static class Arrow {
+		
+		// x pos is radius * cossine of angle
+		// y pos is the radius * sine of the angle
+		
+		int position;
+		int type;
+		
+		public Arrow (int px, int tx) {
+			position = px;
+			type = tx;
+		}
 	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
+	
+	// This method is used to start the game if the user clicks anywhere on the menu screen
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 		mouseX = e.getX();
 		mouseY = e.getY();
 		if (gameState == 0) {
@@ -325,34 +335,14 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			}
 		}
 	}
+	
+	// Useless Methods
+	public void keyTyped(KeyEvent e) {}
+	public void keyReleased(KeyEvent e) {}
+	public void mouseClicked(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	// x pos is radius * cossine of angle
-	// y pos is the radius * sine of the angle
-	public static class Arrow{ //
-		int position;
-		int type;
-		
-		public Arrow (int px, int tx) {
-			position = px;
-			type = tx;
-		}
-	}
+	
 }
