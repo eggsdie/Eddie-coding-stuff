@@ -33,7 +33,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static int time = 31; // used to check how long has it been since last arrow spawned
 	public static int spawnTime = 31; //500/16ms to get 2 arrows per second
 	public static int decrease = 4; // used to decrease spawntime speed, making arrows spawn faster
-	public static int scoreAddition = 0; // amount of points given to the user after each successful arrow correlation
+	public static int scoreAddition = 5; // amount of points given to the user after each successful arrow correlation
 	public static int healthIncrease = 1; // health given back to the user after points are acheived, if the bar is not already full
 	public static int maxSpeed = 10; // to set a max limit speed at which arrows can move
 	public static int currentscore = 0; // counting total score of the user in 1 run
@@ -191,6 +191,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				counter = 1800;
 				spawnTime-=decrease;
 				healthIncrease+=2;
+				scoreAddition+=5;
 			}
 		}
 		
@@ -234,7 +235,6 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 					if(!arrows.isEmpty()&& arrows.peek().position<=-440) {
 						if(arrows.peek().type == arrow) {
 							currentscore+= scoreAddition;
-							scoreAddition++;
 							if(health < 392) {
 								health+=healthIncrease;
 							}	
@@ -297,6 +297,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				currentscore = 0;
 				time = 31;
 				healthIncrease = 1;
+				arrows.clear();
 			}
 		}
 		
