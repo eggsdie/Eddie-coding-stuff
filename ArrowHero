@@ -159,11 +159,11 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.setColor(new Color(107,0,0));
 			g.fillRect(75, 575, 400, 30); // <- dark red outline
 			
-			g.setColor(new Color(0,0,0)); // <- to mek the red rectangle look like an outline
-			g.fillRect(79, 579, 392, 22);
+			g.setColor(new Color(0,0,0)); 
+			g.fillRect(79, 579, 392, 22); // <- to make the red rectangle look like an outline
 			
 			g.setColor(new Color(186,0,0));
-			g.fillRect(79, 579, health, 22);
+			g.fillRect(79, 579, health, 22); // <- actual health bar
 			
 			// Current Score Display
 			g.setColor(new Color(220,220,220));
@@ -242,7 +242,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 						else {
 							health-=25;
 						}
-						arrows.poll(); // deleting the first value of the LinkedList, no that it has been checked
+						arrows.poll(); // deleting the first value of the LinkedList, now that it has been checked
 					}
 					
 					// Game Over if the user runs out of health
