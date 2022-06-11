@@ -70,11 +70,13 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		// Set the visibility of the frame to visible
 		myFrame.setVisible(true);
 		inputFile = new Scanner(new File("highscore.txt"));
-		outputFile = new PrintWriter(new FileWriter("highscore.txt"));
+		//outputFile = new PrintWriter(new FileWriter("highscore.txt"));
 		
 		// Reading the user's highscore stored in text file
-		highscore = inputFile.nextLine();
-		
+		while(inputFile.hasNextLine()) {
+			highscore = inputFile.nextLine();
+		}
+		System.out.println(highscore);
 		inputFile.close();
 		
 	}
@@ -142,6 +144,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.setColor(new Color(220,220,220));
 			g.setFont(new Font("Courier", Font.PLAIN, 15));
 			g.drawString("Highscore: " + highscore, 190, 575);
+			
 		
 		// Game Screen
 		} else if (gameState == 1) {
@@ -211,7 +214,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				System.out.println(count);
 				counter = 1800;
 				spawnTime-=decrease;
-				healthIncrease+=2;
+				healthIncrease+=5;
 				scoreAddition+=5;
 			}
 		}
@@ -232,6 +235,11 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.drawString("Game Paused", 75, 400);
 			g.drawString("Press space bar to unpause", 75, 600);
 		}
+		else if(gameState==4) {
+			g.setColor(new Color(255,255,255));
+			g.setFont(new Font("Courier", Font.BOLD, 20));
+			g.drawString("test if this works",75, 400);
+		}
 
 	}
 
@@ -251,7 +259,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 						}
 						
 						time++;
-						healthIncrease=25;
+						healthIncrease=5;
 						// Giving score and health if entered arrow matches
 						if(count > 0) {
 							if(!arrows.isEmpty()&& arrows.peek().position<=-440) {
@@ -285,11 +293,15 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 						
 						// Game Over if the user runs out of health
 						if (health < 0) {
-							gameState = 2;
+							
+							
 							if(currentscore > Integer.parseInt(highscore)) {
+								outputFile = new PrintWriter(new FileWriter("highscore.txt"));
 								outputFile.print(currentscore);
 								outputFile.close();			
+								highscore=""+currentscore;
 							}
+							gameState = 2;
 						}	
 					}
 					
@@ -318,11 +330,16 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 						
 						// Game Over if the user runs out of health
 						if (health < 0) {
-							gameState = 2;
+							
+							
+							inputFile.close();
 							if(currentscore > Integer.parseInt(highscore)) {
+								outputFile = new PrintWriter(new FileWriter("highscore.txt"));
 								outputFile.print(currentscore);
-								outputFile.close();			
+								highscore=""+currentscore;
+								outputFile.close();
 							}
+							gameState = 2;
 						}	
 					}
 				}
@@ -405,8 +422,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		mouseX = e.getX();
 		mouseY = e.getY();
 		if (gameState == 0) {
-			if (0 <= mouseX && mouseX <= 680 && 0 <= mouseY && mouseY <= 928) {
-				gameState = 1;
+			//10+40, 630+40
+			if (10 <= mouseX && mouseX <= 50 && 630 <= mouseY && mouseY <= 670) {
+				gameState = 4;
 				paintComponent(this.getGraphics());
 			}
 		}
