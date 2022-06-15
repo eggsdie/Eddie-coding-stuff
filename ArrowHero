@@ -30,18 +30,18 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static int mouseY; // gets position of y
 	public static int health = 392; // full health of player, 392 because that is the pixel length of used rectangle
 	public static int angle = -91; // angle of the rotating object starts at -90 since we need the object to start
-	public static int count = 2; 	// to make the object move faster and faster, it is used along
+	public static double count = 2; 	// to make the object move faster and faster, it is used along
 				    	// counter in order to make the object move faster after a certain ammount of spins
 	public static int counter = 1800; 	// using count, i subtract counter form count, and since count gets bigger every
 						// angle, it will take approxipately, counter/360 spins before the object moves faster
 	public static int arrow = 0;// variable for which arrowkey
 	public static LinkedList<Arrow> arrows = new LinkedList<Arrow>(); // array of unlimited length to hold currently spinning arrows
 	public static int time = 31; // used to check how long has it been since last arrow spawned
-	public static int spawnTime = 31; //500/16ms to get 2 arrows per second
+	public static int spawnTime = 50; //500/16ms to get 2 arrows per second
 	public static int decrease = 4; // used to decrease spawntime speed, making arrows spawn faster
-	public static int scoreAddition = 5; // amount of points given to the user after each successful arrow correlation
-	public static int healthIncrease = 1; // health given back to the user after points are acheived, if the bar is not already full
-	public static int maxSpeed = 10; // to set a max limit speed at which arrows can move
+	public static int scoreAddition = 1; // amount of points given to the user after each successful arrow correlation
+	public static int healthIncrease = 5; // health given back to the user after points are acheived, if the bar is not already full
+	public static int maxScore = 25; // to set a max limit speed at which arrows can move
 	public static int currentscore = 0; // counting total score of the user in 1 run
 	public static int highscore; // keeping track of the highscore in a text file
 	public static BufferedImage settings; // settings icon
@@ -54,6 +54,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static BufferedImage [] indication;
 	public static Scanner inputFile; // scanner to read stored highscore
 	public static PrintWriter outputFile; // to stream the new highscore into the text file
+	public static int scoreAdd = 1;
+	public static int healthDecrease = 25;
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -194,7 +196,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 					arrows.get(i).position -= count;
 					g.drawImage(images[arrows.get(i).type], (int) (215 + 200 * Math.cos(arrows.get(i).position * Math.PI / 180)),
 							(int) (235 + 200 * Math.sin(arrows.get(i).position * Math.PI / 180)), this);
-
+					count +=0.0001;
+					System.out.println(count);
+					
 				}
 			
 			
@@ -204,12 +208,17 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			// Increasing Speed
 			if (counter < 0) {
 				//count = Math.min(maxSpeed, count+1);
-				count++;
+				//count++;
+				if(scoreAddition>maxScore) {
+					scoreAddition= maxScore;
+				}
 				System.out.println(count);
 				counter = 1800;
 				spawnTime-=decrease;
 				healthIncrease+=5;
-				scoreAddition+=5;
+				scoreAddition+=scoreAdd;
+				scoreAdd++;
+				healthDecrease+=5;
 			}
 		}
 		
@@ -263,10 +272,12 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 								currentscore+= scoreAddition;
 								if(health < 392) {
 									health+=healthIncrease;
-								}	
+								}
+								
 							}
 							else {
-								health-=25;
+								health-=healthDecrease;
+								
 							}
 							arrows.poll(); // deleting the first value of the LinkedList, no that it has been checked
 						}
@@ -346,10 +357,10 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		// x pos is radius * cossine of angle
 		// y pos is the radius * sine of the angle
 		
-		int position;
+		float position;
 		int type;
 		
-		public Arrow (int px, int tx) {
+		public Arrow (float px, int tx) {
 			position = px;
 			type = tx;
 		}
