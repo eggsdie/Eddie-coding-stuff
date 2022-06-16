@@ -1,3 +1,4 @@
+package unit6;
 // Necessary Imports
 import javax.swing.*;
 import java.awt.*;
@@ -64,6 +65,12 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static String score2;
 	public static String name3;
 	public static String score3;
+	public static Clip song;
+	public static AudioInputStream songInput;
+	public static int intscore1;
+	public static int intscore2;
+	public static int intscore3; 
+	
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -113,7 +120,11 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			indication[2] = ImageIO.read(new File("upindication.png"));
 			indication[3] = ImageIO.read(new File("rightindication.png"));
 			indication[4] = ImageIO.read(new File("downindication.png"));
-		
+			songInput = AudioSystem.getAudioInputStream(new File("Arcade-background-music-retro-style.wav"));
+			song = AudioSystem.getClip();
+			song.open(songInput);
+			song.start();
+			song.loop(song.LOOP_CONTINUOUSLY);
 		} catch (Exception e) {
 			System.out.println("no image");
 
@@ -252,7 +263,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				//count = Math.min(maxSpeed, count+1);
 				//count++;
 				if(scoreAddition>maxScore) {
-					scoreAddition= maxScore;
+					scoreAdd=0;
 				}
 				System.out.println(count);
 				counter = 1800;
@@ -271,7 +282,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.setColor(new Color(255,255,255));
 			g.setFont(new Font("Courier", Font.BOLD, 20));
 			g.drawString("Great Job! You scored a total of " + currentscore, 50, 150);
-			g.drawString("Highscore: " + score1, 165, 450);
+			g.drawString("Highscore: " + intscore1, 165, 450);
 			g.drawString("Press space bar to restart!", 90, 600);
 			
 			g.drawImage(endscreen, 150, 200, null);
@@ -331,9 +342,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 						// Game Over if the user runs out of health
 						if (health < 0) {
 							
-							int intscore1 = Integer.parseInt(score1);
-							int intscore2 = Integer.parseInt(score2);
-							int intscore3 = Integer.parseInt(score3);
+							intscore1 = Integer.parseInt(score1);
+							intscore2 = Integer.parseInt(score2);
+							intscore3 = Integer.parseInt(score3);
 									
 							
 							if (currentscore > intscore1)
@@ -342,6 +353,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 								intscore3 = intscore2;
 								name2 = name1;
 								intscore2 = intscore1;
+								name1 = username;
 								intscore1 = currentscore;
 							}
 							else if (currentscore > intscore2)
