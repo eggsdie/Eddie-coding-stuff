@@ -152,9 +152,20 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.drawString("Arrow Master!", 100, 140);
 			
 			g.setFont(new Font("Monospaced", Font.ITALIC, 15));
-			g.drawString("Please type a username below and press enter: ", 50, 465);
+			g.drawString("Enter a username below: ", 150, 465);
+			
+			g.drawLine(100, 505, 400, 505);
+			
 			g.setFont(new Font("Monospaced", Font.BOLD, 20));
-			g.drawString(username, 250-username.length()*5, 490);
+			g.drawString(username, 250-username.length()*5, 495);
+			
+			if (username.length() > 0)
+			{
+				g.setColor(new Color(184,15,10));
+				g.setFont(new Font("Monospaced", Font.BOLD, 30));
+				g.drawString("Press ENTER to begin!", 60, 580);
+			}
+			
 		}
 		
 		// Menu Screen
@@ -171,7 +182,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			// Instructions
 			g.setColor(new Color(255,255,255));
 			g.setFont(new Font("Monospaced", Font.PLAIN, 20));
-			g.drawString("Press a key to begin!", 135, 500);
+			g.drawString("Press an arrow key to begin!", 90, 500);
 			
 			// Arrows
 			g.drawImage(images[2], 220, 320, null);
@@ -180,17 +191,17 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.drawImage(images[3], 300, 400, null);
 			
 			// Settings
-			g.drawImage(settings, 10, 630, null);
+			g.drawImage(settings, 240, 615, null);
+			
 			
 			// High Score
-			
 			g.setColor(new Color(220,220,220));
 			g.setFont(new Font("Monospaced", Font.BOLD, 15));
 			g.drawString("HIGHSCORES", 215, 540);
 			g.setFont(new Font("Monospaced", Font.PLAIN, 15));
-			g.drawString("1. " + name1 + ": " + score1, 210, 560);
-			g.drawString("2. " + name2 + ": " + score2, 210, 575);
-			g.drawString("3. " + name3 + ": " + score3, 210, 590);
+			g.drawString("1. " + name1 + ": " + score1, 200, 560);
+			g.drawString("2. " + name2 + ": " + score2, 200, 575);
+			g.drawString("3. " + name3 + ": " + score3, 200, 590);
 			
 			
 		
