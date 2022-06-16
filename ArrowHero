@@ -42,7 +42,6 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static int healthIncrease = 5; // health given back to the user after points are acheived, if the bar is not already full
 	public static int maxScore = 25; // to set a max limit speed at which arrows can move
 	public static int currentscore = 0; // counting total score of the user in 1 run
-	public static int highscore; // keeping track of the highscore in a text file
 	public static BufferedImage settings; // settings icon
 	public static BufferedImage heart; // heart icon
 	public static BufferedImage endscreen; // big arrow on end screen
@@ -58,6 +57,13 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static PrintWriter outputFile; // to stream the new highscore into the text file
 	public static int scoreAdd = 1;
 	public static int healthDecrease = 25;
+	public static String username = "";
+	public static String name1;
+	public static String score1;
+	public static String name2;
+	public static String score2;
+	public static String name3;
+	public static String score3;
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -72,16 +78,15 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 
 		// Set the visibility of the frame to visible
 		myFrame.setVisible(true);
-		inputFile = new Scanner(new File("highscore.txt"));
-		//outputFile = new PrintWriter(new FileWriter("highscore.txt"));
 		
 		// Reading the user's highscore stored in text file
-		while(inputFile.hasNextLine()) {
-			highscore = Integer.parseInt(inputFile.nextLine());
-		}
-		System.out.println(highscore);
-		inputFile.close();
-		
+		inputFile = new Scanner(new File("highscore.txt"));
+		name1 = inputFile.next();
+		score1 = inputFile.next();
+		name2 = inputFile.next();
+		score2 = inputFile.next();
+		name3 = inputFile.next();
+		score3 = inputFile.next();
 	}
 
 	public arrowhero() {
@@ -124,8 +129,25 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 
 	public void paintComponent(Graphics g) {
 		
+		if (gameState == 0)
+		{
+			super.paintComponent(g);
+			
+			g.drawImage(endscreen, 150, 200, null);
+			
+			g.setColor(new Color(255,255,255));
+			g.setFont(new Font("Monospaced", Font.BOLD, 40));
+			g.drawString("Welcome to", 130, 100);
+			g.drawString("Arrow Master!", 100, 140);
+			
+			g.setFont(new Font("Monospaced", Font.ITALIC, 15));
+			g.drawString("Please type a username below and press enter: ", 50, 465);
+			g.setFont(new Font("Monospaced", Font.BOLD, 20));
+			g.drawString(username, 250-username.length()*5, 490);
+		}
+		
 		// Menu Screen
-		if (gameState == 0) {
+		else if (gameState == 1) {
 			
 			// Background
 			super.paintComponent(g);
@@ -137,8 +159,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			
 			// Instructions
 			g.setColor(new Color(255,255,255));
-			g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-			g.drawString("Press a key to begin!", 175, 500);
+			g.setFont(new Font("Monospaced", Font.PLAIN, 20));
+			g.drawString("Press a key to begin!", 135, 500);
 			
 			// Arrows
 			g.drawImage(images[2], 220, 320, null);
@@ -150,13 +172,19 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.drawImage(settings, 10, 630, null);
 			
 			// High Score
+			
 			g.setColor(new Color(220,220,220));
-			g.setFont(new Font("Courier", Font.PLAIN, 15));
-			g.drawString("Highscore: " + highscore, 190, 575);
+			g.setFont(new Font("Monospaced", Font.BOLD, 15));
+			g.drawString("HIGHSCORES", 215, 540);
+			g.setFont(new Font("Monospaced", Font.PLAIN, 15));
+			g.drawString("1. " + name1 + ": " + score1, 210, 560);
+			g.drawString("2. " + name2 + ": " + score2, 210, 575);
+			g.drawString("3. " + name3 + ": " + score3, 210, 590);
+			
 			
 		
 		// Game Screen
-		} else if (gameState == 1) {
+		} else if (gameState == 2) {
 			
 			// Background
 			super.paintComponent(g);
@@ -199,7 +227,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 					arrows.get(i).position -= count;
 					g.drawImage(images[arrows.get(i).type], (int) (215 + 200 * Math.cos(arrows.get(i).position * Math.PI / 180)),
 							(int) (235 + 200 * Math.sin(arrows.get(i).position * Math.PI / 180)), this);
-					count +=0.0001;
+					count += 0.0001;
 					System.out.println(count);
 					
 				}
@@ -210,8 +238,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 					{
 						messages[i] -= 1;
 						g.setColor(new Color(255,255,255));
-						g.setFont(new Font("Courier", Font.PLAIN, 12));
-						g.drawString(messagestext[i], 200, 50 + messages[i]);
+						g.setFont(new Font("Courier", Font.PLAIN, 20));
+						g.drawString(messagestext[i], 200, 200 + messages[i]);
 					}
 				}
 			
@@ -237,13 +265,13 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		}
 		
 		// Game Over Screen
-		else if (gameState == 2) {
+		else if (gameState == 3) {
 			super.paintComponent(g);
 			
 			g.setColor(new Color(255,255,255));
 			g.setFont(new Font("Courier", Font.BOLD, 20));
 			g.drawString("Great Job! You scored a total of " + currentscore, 50, 150);
-			g.drawString("Highscore: " + highscore, 165, 450);
+			g.drawString("Highscore: " + score1, 165, 450);
 			g.drawString("Press space bar to restart!", 90, 600);
 			
 			g.drawImage(endscreen, 150, 200, null);
@@ -251,13 +279,13 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		}
 		
 		// Game Paused Screen
-		else if(gameState == 3) {
+		else if(gameState == 4) {
 			g.setColor(new Color(255,255,255));
 			g.setFont(new Font("Courier", Font.BOLD, 20));
 			g.drawString("Game Paused", 75, 400);
 			g.drawString("Press space bar to unpause", 75, 600);
 		}
-		else if(gameState==4) {
+		else if(gameState == 5) {
 			g.setColor(new Color(255,255,255));
 			g.setFont(new Font("Courier", Font.BOLD, 20));
 			g.drawString("test if this works",75, 400);
@@ -272,7 +300,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			
 				Thread.sleep(16); // The commands after while(true) but before try will execute once every 80 milliseconds
 				
-				if (gameState == 1) {
+				if (gameState == 2) {
 					
 			
 						// Checking if a new arrow can spawn yet
@@ -302,13 +330,40 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 						
 						// Game Over if the user runs out of health
 						if (health < 0) {
-							if(currentscore > highscore) {
-								outputFile = new PrintWriter(new FileWriter("highscore.txt"));
-								outputFile.print(currentscore);
-								highscore = currentscore;
-								outputFile.close();
+							
+							int intscore1 = Integer.parseInt(score1);
+							int intscore2 = Integer.parseInt(score2);
+							int intscore3 = Integer.parseInt(score3);
+									
+							
+							if (currentscore > intscore1)
+							{
+								name3 = name2;
+								intscore3 = intscore2;
+								name2 = name1;
+								intscore2 = intscore1;
+								intscore1 = currentscore;
 							}
-							gameState = 2;
+							else if (currentscore > intscore2)
+							{
+								name3 = name2;
+								intscore3 = intscore2;
+								name2 = username;
+								intscore2 = currentscore;
+							}
+							else if (currentscore > intscore3)
+							{
+								name3 = username;
+								intscore3 = currentscore;
+							}
+							
+							outputFile = new PrintWriter(new FileWriter("highscore.txt"));
+							outputFile.println(name1 + " " + intscore1);
+							outputFile.println(name2 + " " + intscore2);
+							outputFile.println(name3 + " " + intscore3);
+							outputFile.close();	
+						
+							gameState = 3;
 						}	
 					
 				}
@@ -323,17 +378,40 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 
 	public void keyPressed(KeyEvent e) {
 		
+		if (gameState == 0)
+		{
+			if (e.getKeyCode() >= 65 && e.getKeyCode() <= 90)
+			{
+				if (username.length() <= 9)
+				{
+					username += e.getKeyChar();
+				}
+			}
+			
+			if (e.getKeyCode() == 8 && username.length() > 0)
+			{
+				username = username.substring(0, username.length()-1);
+			}
+			
+			if (username.length() > 0 && e.getKeyCode() == 10)
+			{
+				gameState = 1;
+			}
+			
+		}
+		
+		
 		// Switching over to game screen if any key is pressed
-		if(gameState == 0) {
-			if(e.getKeyCode()>0) {
-				gameState =1;
+		if(gameState == 1) {
+			if(e.getKeyCode() > 0 && e.getKeyCode() != 10) {
+				gameState = 2;
 			}
 		}
 		
 		// Reading the entered arrow key of the user
-		if(gameState == 1) {
+		if(gameState == 2) {
 			if(e.getKeyCode() == 32) {
-				gameState = 3;
+				gameState = 4;
 			}
 			if (e.getKeyCode() >= 37 && e.getKeyCode() <= 40) {
 				arrow = e.getKeyCode() - 36;
@@ -343,11 +421,11 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		}
 		
 		// Resetting all variables if Game Over
-		if(gameState == 2) {
+		if(gameState == 3) {
 			if (e.getKeyCode()==32) {
 				count = 2;
 				counter = 1800; 
-				gameState = 1;
+				gameState = 2;
 				health = 392;
 				spawnTime = 31;//500/16ms to get 2 per second
 				decrease = 4;
@@ -361,9 +439,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		}
 		
 		// Back to Game Screen from Pause Screen if space key is pressed
-		if(gameState == 3) {
+		if(gameState == 4) {
 			if(e.getKeyCode() == 32) {
-				gameState = 1;
+				gameState = 2;
 			}
 		}
 		
@@ -388,14 +466,15 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public void mousePressed(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
-		if (gameState == 0) {
+		if (gameState == 1) {
 			//10+40, 630+40
 			if (10 <= mouseX && mouseX <= 50 && 630 <= mouseY && mouseY <= 670) {
-				gameState = 4;
+				gameState = 5;
 				paintComponent(this.getGraphics());
 			}
 		}
 	}
+	
 	
 	// Useless Methods
 	public void keyTyped(KeyEvent e) {}
