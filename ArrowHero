@@ -302,7 +302,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.drawString("Great Job! You scored a total of " + currentscore, 30, 150);
 			g.drawString("Highscore: " + intscore1, 165, 450);
 			g.drawString("Press space bar to restart!", 90, 600);
-			
+			g.drawString("Press escape key to go to the menu!", 50, 650);
 			g.drawImage(endscreen, 150, 200, null);
 			
 		}
@@ -391,6 +391,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 								name3 = username;
 								intscore3 = currentscore;
 							}
+							score1 = ""+intscore1;
+							score2 =""+ intscore2;
+							score3 =""+ intscore3;
 							
 							outputFile = new PrintWriter(new FileWriter("highscore.txt"));
 							outputFile.println(name1 + " " + intscore1);
@@ -436,9 +439,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		}
 		
 		
-		// Switching over to game screen if any key is pressed
+		// Switching over to game screen if any arrowkey is pressed
 		if(gameState == 1) {
-			if(e.getKeyCode() > 0 && e.getKeyCode() != 10) {
+			if(e.getKeyCode() > 36 && e.getKeyCode() <41) {
 				gameState = 2;
 			}
 		}
@@ -474,10 +477,22 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			}
 		}
 		
-		// Back to Game Screen from Pause Screen if space key is pressed
-		if(gameState == 4) {
-			if(e.getKeyCode() == 32) {
-				gameState = 2;
+//back to menu screen
+		if(gameState == 3) {
+			if(e.getKeyCode() == 27) {
+				gameState = 1;
+				count = 2;
+				counter = 1800; 
+				health = 392;
+				spawnTime = 50;//500/16ms to get 2 per second
+				decrease = 4;
+				scoreAddition = 1;
+				currentscore = 0;
+				time = 31;
+				healthIncrease = 5;
+				arrows.clear();
+				arrow=0;
+				healthDecrease=25;
 			}
 		}
 		
