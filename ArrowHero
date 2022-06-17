@@ -70,6 +70,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static int intscore1;
 	public static int intscore2;
 	public static int intscore3; 
+	public static BufferedImage sound;
+	public static int songCounter = 0;
 	
 	
 	public static void main(String[] args) throws IOException {
@@ -125,6 +127,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			song.open(songInput);
 			song.start();
 			song.loop(song.LOOP_CONTINUOUSLY);
+			sound = ImageIO.read(new File(""));
 		} catch (Exception e) {
 			System.out.println("no image");
 
@@ -202,6 +205,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.drawString("1. " + name1 + ": " + score1, 200, 560);
 			g.drawString("2. " + name2 + ": " + score2, 200, 575);
 			g.drawString("3. " + name3 + ": " + score3, 200, 590);
+		
 			
 			
 		
@@ -242,15 +246,12 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		
 			// Spawning Arrows
 			g.drawImage(indication[arrow], 225, 50, null);		
-			System.out.println("TEST");
 
 				for(int i = 0; i <arrows.size(); i++) {
-					System.out.println(arrows.get(i).position);
 					arrows.get(i).position -= count;
 					g.drawImage(images[arrows.get(i).type], (int) (215 + 200 * Math.cos(arrows.get(i).position * Math.PI / 180)),
 							(int) (235 + 200 * Math.sin(arrows.get(i).position * Math.PI / 180)), this);
 					count += 0.0001;
-					System.out.println(count);
 					
 				}
 				
@@ -276,9 +277,15 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				if(scoreAddition>maxScore) {
 					scoreAdd=0;
 				}
-				System.out.println(count);
+
 				counter = 1800;
 				spawnTime-=decrease;
+				if(spawnTime < 18) {
+					spawnTime = 18;
+					decrease = 0;
+				}
+				
+				System.out.println(spawnTime);
 				healthIncrease+=5;
 				scoreAddition+=scoreAdd;
 				scoreAdd++;
@@ -292,7 +299,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			
 			g.setColor(new Color(255,255,255));
 			g.setFont(new Font("Courier", Font.BOLD, 20));
-			g.drawString("Great Job! You scored a total of " + currentscore, 50, 150);
+			g.drawString("Great Job! You scored a total of " + currentscore, 30, 150);
 			g.drawString("Highscore: " + intscore1, 165, 450);
 			g.drawString("Press space bar to restart!", 90, 600);
 			
@@ -301,19 +308,24 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		}
 		
 		// Game Paused Screen
-		else if(gameState == 4) {
-			g.setColor(new Color(255,255,255));
-			g.setFont(new Font("Courier", Font.BOLD, 20));
-			g.drawString("Game Paused", 75, 400);
-			g.drawString("Press space bar to unpause", 75, 600);
-		}
 		else if(gameState == 5) {
+			super.paintComponent(g);
 			g.setColor(new Color(255,255,255));
 			g.setFont(new Font("Courier", Font.BOLD, 20));
-			g.drawString("test if this works",75, 400);
+			g.drawString("Arrow hero is a minimalist game where ",10, 200);
+			g.drawString("your goal is to match a continuous ",10, 225);
+			g.drawString("unstoppable stream of arrows using ",10, 250);
+			g.drawString("your keyboard keys.",10, 275);
+			g.drawString("Click here to turn off/on sound", 20, 500);
+			g.drawImage(sound, 20, 615, null);
+			g.drawImage(settings, 240, 615, null);
+			
+	
 		}
 
 	}
+	public int status = 0; //0 = on, 1=off
+
 
 	public void run() {
 		while (true) {
@@ -450,14 +462,16 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				counter = 1800; 
 				gameState = 2;
 				health = 392;
-				spawnTime = 31;//500/16ms to get 2 per second
+				spawnTime = 50;//500/16ms to get 2 per second
 				decrease = 4;
-				scoreAddition = 5;
+				scoreAddition = 1;
 				currentscore = 0;
 				time = 31;
-				healthIncrease = 1;
+				healthIncrease = 5;
 				arrows.clear();
 				arrow=0;
+				healthDecrease=25;
+				decrease = 4;
 			}
 		}
 		
@@ -491,9 +505,27 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		mouseY = e.getY();
 		if (gameState == 1) {
 			//10+40, 630+40
-			if (10 <= mouseX && mouseX <= 50 && 630 <= mouseY && mouseY <= 670) {
+			//240, 615
+			if (240 <= mouseX && mouseX <= 280 && 615 <= mouseY && mouseY <= 655) {
 				gameState = 5;
 				paintComponent(this.getGraphics());
+			}
+		}
+		else if (gameState == 5) {
+			//10+40, 630+40
+			if (240 <= mouseX && mouseX <= 280 && 615 <= mouseY && mouseY <= 655) {
+				gameState = 1;
+				paintComponent(this.getGraphics());
+			}
+			if (20 <= mouseX && mouseX <= 60 && 615 <= mouseY && mouseY <= 655) {
+				songCounter++;
+				if(songCounter%2==0) {
+					song.start();
+					song.loop(song.LOOP_CONTINUOUSLY);
+				}
+				else {
+					song.stop();
+				}
 			}
 		}
 	}
