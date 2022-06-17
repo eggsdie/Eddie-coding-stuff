@@ -72,6 +72,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static int intscore3; 
 	public static BufferedImage sound;
 	public static int songCounter = 0;
+	public static int scoreCounter = 0;
 	
 	
 	public static void main(String[] args) throws IOException {
