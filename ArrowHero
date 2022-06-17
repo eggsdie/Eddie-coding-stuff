@@ -51,7 +51,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static BufferedImage arrowleft; // left arrow
 	public static BufferedImage arrowright; // right arrow
 	public static int [] messages = new int[3];
-	public static String [] messagestext = new String [] {"Keep trying!", "Looking good!", "Amazing!"};
+	public static String [] messagestext = new String [] {"Keep trying!", "Looking good!", ""};
 	public static BufferedImage [] images; // an array to store all arrow variations
 	public static BufferedImage [] indication;
 	public static Scanner inputFile; // scanner to read stored highscore
@@ -258,10 +258,19 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				{
 					if (messages[i] > 0)
 					{
-						messages[i] -= 1;
-						g.setColor(new Color(255,255,255));
-						g.setFont(new Font("Courier", Font.PLAIN, 20));
-						g.drawString(messagestext[i], 200, 200 + messages[i]);
+						if(i ==2) {
+							messages[i] -= 1;
+							g.setColor(new Color(255,255,255));
+							g.setFont(new Font("Courier", Font.PLAIN, 20));
+							g.drawString(messagestext[i], 315, 100 + messages[i]);
+						}
+						else {
+							messages[i] -= 1;
+							g.setColor(new Color(255,255,255));
+							g.setFont(new Font("Courier", Font.PLAIN, 20));
+							g.drawString(messagestext[i], 200, 200 + messages[i]);
+						}
+						
 					}
 				}
 			
@@ -347,10 +356,20 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 						// Giving score and health if entered arrow matches
 						if(!arrows.isEmpty()&& arrows.peek().position<=-440) {
 							if(arrows.peek().type == arrow) {
+								scoreCounter++;
 								currentscore+= scoreAddition;
+								if(scoreCounter==5) {
+									messages[1] = 20;
+									scoreCounter = 0;
+								}
+								
+								messagestext[2]= "+"+scoreAddition;
+								messages[2] = 20;
 								if(health < 392) {
 									health = Math.min(health + healthIncrease, 392);
+									
 								}
+								
 								
 							}
 							else {
