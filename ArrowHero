@@ -1,4 +1,4 @@
-package unit6;
+
 // Necessary Imports
 import javax.swing.*;
 import java.awt.*;
@@ -280,8 +280,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 
 				counter = 1800;
 				spawnTime-=decrease;
-				if(spawnTime < 18) {
-					spawnTime = 18;
+				if(spawnTime < 14) {
+					spawnTime = 14;
 					decrease = 0;
 				}
 				
@@ -289,7 +289,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				healthIncrease+=5;
 				scoreAddition+=scoreAdd;
 				scoreAdd++;
-				healthDecrease+=5;
+				healthDecrease+=10;
 			}
 		}
 		
@@ -350,7 +350,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 							if(arrows.peek().type == arrow) {
 								currentscore+= scoreAddition;
 								if(health < 392) {
-									health+=healthIncrease;
+									health = Math.min(health + healthIncrease, 392);
 								}
 								
 							}
@@ -471,7 +471,6 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				arrows.clear();
 				arrow=0;
 				healthDecrease=25;
-				decrease = 4;
 			}
 		}
 		
