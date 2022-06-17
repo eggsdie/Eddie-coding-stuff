@@ -50,8 +50,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static BufferedImage arrowdown; // down arrow
 	public static BufferedImage arrowleft; // left arrow
 	public static BufferedImage arrowright; // right arrow
-	public static int [] messages = new int[3];
-	public static String [] messagestext = new String [] {"Keep trying!", "Looking good!", ""};
+	public static int [] messages = new int[7];
+	public static String [] messagestext = new String [] {"Keep trying!","Unlucky!","So close!", "Looking good!", "OMG!", "Amazing!",""};
 	public static BufferedImage [] images; // an array to store all arrow variations
 	public static BufferedImage [] indication;
 	public static Scanner inputFile; // scanner to read stored highscore
@@ -259,7 +259,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				{
 					if (messages[i] > 0)
 					{
-						if(i ==2) {
+						if(i ==6) {
 							messages[i] -= 1;
 							g.setColor(new Color(255,255,255));
 							g.setFont(new Font("Courier", Font.PLAIN, 20));
@@ -360,12 +360,12 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 								scoreCounter++;
 								currentscore+= scoreAddition;
 								if(scoreCounter==5) {
-									messages[1] = 20;
+									messages[(int)(Math.random()*(5-3+1))+3] = 20;
 									scoreCounter = 0;
 								}
 								
-								messagestext[2]= "+"+scoreAddition;
-								messages[2] = 20;
+								messagestext[6]= "+"+scoreAddition;
+								messages[6] = 20;
 								if(health < 392) {
 									health = Math.min(health + healthIncrease, 392);
 									
@@ -375,7 +375,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 							}
 							else {
 								health-=healthDecrease;
-								messages[0] = 20;
+								messages[(int)(Math.random()*(2-0+1))+0] = 20;
 								
 							}
 							arrows.poll(); // deleting the first value of the LinkedList, no that it has been checked
