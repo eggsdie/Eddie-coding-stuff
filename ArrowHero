@@ -1,3 +1,5 @@
+package homework;
+
 
 // Necessary Imports
 import javax.swing.*;
@@ -130,7 +132,6 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			song.open(songInput);
 			song.start();
 			song.loop(song.LOOP_CONTINUOUSLY);
-			sound = ImageIO.read(new File(""));
 		} catch (Exception e) {
 			System.out.println("no image");
 
@@ -568,10 +569,12 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				time = 31;
 				healthIncrease = 5;
 				arrows.clear();
-				arrow=0;
+				arrow=1;
 				healthDecrease=25;
 				gameState = 2;
+				scoreCounter = 0;
 				paintComponent(this.getGraphics());
+				
 			}
 		}
 		
@@ -591,7 +594,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				arrow=0;
 				healthDecrease=25;
 				gameState = 1;
+				scoreCounter = 0;
 				paintComponent(this.getGraphics());
+				
 			}
 		}
 		
