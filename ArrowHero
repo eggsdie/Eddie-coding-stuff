@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
+import java.io.File;
+import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.io.*;
 import javax.sound.sampled.AudioInputStream;
@@ -15,14 +18,6 @@ import java.util.*;
 import java.util.Scanner;
 
 public class arrowhero extends JPanel implements MouseListener, KeyListener, Runnable {
-	
-	// Things to improve
-	/* dont read highscore in the start, update in the end
-	 * make sure highscore is just 1 file where it overrides
-	 * light mode, dark mode
-	 * settings for background music, mode
-	 * effects. ex: making the circle at the top bigger and smaller, use fading?
-	 */
 	
 	// Class Variables
 	public static int gameState = 0; // game states
@@ -46,6 +41,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static BufferedImage settings; // settings icon
 	public static BufferedImage heart; // heart icon
 	public static BufferedImage endscreen; // big arrow on end screen
+	public static BufferedImage sound;
+	public static BufferedImage exitarrow;
+	public static BufferedImage info;
 	public static BufferedImage arrowup; // up arrow
 	public static BufferedImage arrowdown; // down arrow
 	public static BufferedImage arrowleft; // left arrow
@@ -70,9 +68,10 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	public static int intscore1;
 	public static int intscore2;
 	public static int intscore3; 
-	public static BufferedImage sound;
 	public static int songCounter = 0;
 	public static int scoreCounter = 0;
+	public static boolean soundCheck = true;
+	public static int circleAnimation = 0;
 	
 	
 	public static void main(String[] args) throws IOException {
@@ -113,6 +112,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			settings = ImageIO.read(new File("settingsicon.jpg"));
 			heart = ImageIO.read(new File("heart.png"));
 			endscreen = ImageIO.read(new File("endscreen.png"));
+			sound = ImageIO.read(new File("soundicon.png"));
+			exitarrow = ImageIO.read(new File("whitearrow.png"));
+			info = ImageIO.read(new File("informationicon.png"));
 			images = new BufferedImage [5];
 			images[1] = ImageIO.read(new File("left.png"));
 			images[2] = ImageIO.read(new File("up.png"));
@@ -158,7 +160,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			g.setFont(new Font("Monospaced", Font.ITALIC, 17));
 			g.drawString("Please enter a username below: ", 100, 465);
 			
-			g.drawLine(190, 505, 320, 505);
+			g.drawLine(190, 507, 320, 507);
 			
 			g.setFont(new Font("Monospaced", Font.BOLD, 20));
 			g.drawString(username, 245-username.length()*5, 500);
@@ -201,11 +203,11 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			// High Score
 			g.setColor(new Color(220,220,220));
 			g.setFont(new Font("Monospaced", Font.BOLD, 15));
-			g.drawString("HIGHSCORES", 215, 540);
+			g.drawString("HIGHSCORES", 205, 540);
 			g.setFont(new Font("Monospaced", Font.PLAIN, 15));
-			g.drawString("1. " + name1 + ": " + score1, 200, 560);
-			g.drawString("2. " + name2 + ": " + score2, 200, 575);
-			g.drawString("3. " + name3 + ": " + score3, 200, 590);
+			g.drawString("1. " + name1 + ": " + score1, 190, 560);
+			g.drawString("2. " + name2 + ": " + score2, 190, 575);
+			g.drawString("3. " + name3 + ": " + score3, 190, 590);
 				
 			
 		
@@ -255,15 +257,40 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 					
 				}
 				
+				if (circleAnimation > 0)
+				{
+					g.setColor(new Color(0,0,0));
+					g.fillOval(190, 15, 120, 120);
+					
+					g.setColor(new Color(255,0,0));
+					g.fillArc(194, 18, 112, 112, 45, 90);
+					g.setColor(new Color(0,128,255));
+					g.fillArc(194, 18, 112, 112, 315, 90);
+					g.setColor(new Color(0,255,0));
+					g.fillArc(194, 18, 112, 112, 135, 90);
+					g.setColor(new Color(255,255,0));
+					g.fillArc(194, 18, 112, 112, 225, 90);
+					
+					g.setColor(new Color(0,0,0));
+					g.fillOval(202, 27, 96, 96);
+					BufferedImage biggerIndication = new BufferedImage(64, 64, indication[arrow].getType());
+					Graphics2D g2d = biggerIndication.createGraphics();
+			        g2d.drawImage(indication[arrow], 0, 0, 64, 64, null);
+			        g2d.dispose();
+					g.drawImage(biggerIndication, 219, 40, null);
+					
+					circleAnimation -= 1;
+				}
+				
 				for (int i = 0; i < messages.length; i++)
 				{
 					if (messages[i] > 0)
 					{
-						if(i ==6) {
+						if(i == 6) {
 							messages[i] -= 1;
 							g.setColor(new Color(255,255,255));
-							g.setFont(new Font("Courier", Font.PLAIN, 20));
-							g.drawString(messagestext[i], 315, 100 + messages[i]);
+							g.setFont(new Font("Courier", Font.BOLD, 20));
+							g.drawString(messagestext[i], 238, 27 + messages[i]);
 						}
 						else {
 							messages[i] -= 1;
@@ -275,8 +302,8 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 					}
 				}
 			
-			
-			
+				
+				
 			counter -= count; 
 			
 			// Increasing Speed
@@ -318,17 +345,65 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		
 		// Game Paused Screen
 		else if(gameState == 5) {
-			super.paintComponent(g);
-			g.setColor(new Color(255,255,255));
-			g.setFont(new Font("Courier", Font.BOLD, 20));
-			g.drawString("Arrow hero is a minimalist game where ",10, 200);
-			g.drawString("your goal is to match a continuous ",10, 225);
-			g.drawString("unstoppable stream of arrows using ",10, 250);
-			g.drawString("your keyboard keys.",10, 275);
-			g.drawString("Click here to turn off/on sound", 20, 500);
-			g.drawImage(sound, 20, 615, null);
-			g.drawImage(settings, 240, 615, null);
 			
+			super.paintComponent(g);
+			
+			g.setColor(new Color(255,255,255));
+			g.drawRect(65, 17, 230, 35);
+			g.drawImage(exitarrow, 20, 20, null);
+			g.setFont(new Font("Courier", Font.BOLD, 20));
+			g.drawString("BACK TO MENU (ESC)", 75, 40);
+			
+			g.drawImage(info, 100, 100, null);
+			
+			g.setColor(new Color(255,255,255));
+			g.setFont(new Font("Monospaced", Font.BOLD, 20));
+			g.drawString("About this game", 170, 130);
+			
+			g.setFont(new Font("Monospaced", Font.BOLD, 14));
+			g.drawString("Arrow hero is a minimalist game where ", 110, 185);
+			g.drawString("your goal is to match a continuous ", 110, 210);
+			
+			g.setColor(new Color(254,32,32));
+			g.drawString("unstoppable stream of arrows ", 110, 235);
+			g.setColor(new Color(255,255,255));
+			g.drawString("using ", 365, 235);
+			g.drawString("your keyboard keys.", 110, 260);
+			
+			g.drawString("This means that if you have more than ", 110, 310);
+			g.drawString("one consecutive ", 110, 335);
+			g.setColor(new Color(254,32,32));
+			g.drawString("up ", 250, 335);
+			g.setColor(new Color(255,255,255));
+			g.drawString("arrow you only have ", 273, 335);
+			g.drawString("have to press the ", 110, 360);
+			g.setColor(new Color(254,32,32));
+			g.drawString("up ", 268, 360);
+			g.setColor(new Color(255,255,255));
+			g.drawString("once to ", 294, 360);
+			g.drawString("validate both.", 110, 385);
+			
+			g.drawString("Made by ", 110, 435);
+			g.setColor(new Color(254,32,32));
+			g.drawString("Demir ", 180, 435);
+			g.setColor(new Color(255,255,255));
+			g.drawString("and ", 233, 435);
+			g.setColor(new Color(254,32,32));
+			g.drawString("Eddie ", 268, 435);
+			g.setColor(new Color(255,255,255));
+			g.drawString(".", 312, 435);
+			
+			g.setFont(new Font("Courier", Font.PLAIN, 22));
+			g.drawString("Music ON/OFF:", 110, 560);
+			
+			g.drawImage(sound, 300, 535, null);
+			
+			if (soundCheck == false)
+			{
+				g.setColor(new Color(255,255,255));
+				g.drawLine(300, 535, 340, 575);
+				g.drawLine(300, 575, 340, 535);
+			}
 	
 		}
 
@@ -378,6 +453,9 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 								messages[(int)(Math.random()*(2-0+1))+0] = 20;
 								
 							}
+							
+							circleAnimation = 10;
+							
 							arrows.poll(); // deleting the first value of the LinkedList, no that it has been checked
 						}
 						
@@ -482,7 +560,6 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			if (e.getKeyCode()==32) {
 				count = 2;
 				counter = 1800; 
-				gameState = 2;
 				health = 392;
 				spawnTime = 50;//500/16ms to get 2 per second
 				decrease = 4;
@@ -493,13 +570,14 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				arrows.clear();
 				arrow=0;
 				healthDecrease=25;
+				gameState = 2;
+				paintComponent(this.getGraphics());
 			}
 		}
 		
 //back to menu screen
 		if(gameState == 3) {
 			if(e.getKeyCode() == 27) {
-				gameState = 1;
 				count = 2;
 				counter = 1800; 
 				health = 392;
@@ -512,6 +590,16 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				arrows.clear();
 				arrow=0;
 				healthDecrease=25;
+				gameState = 1;
+				paintComponent(this.getGraphics());
+			}
+		}
+		
+		if (gameState == 5)
+		{
+			if (e.getKeyCode() == 27)
+			{
+				gameState = 1;
 			}
 		}
 		
@@ -545,13 +633,16 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			}
 		}
 		else if (gameState == 5) {
-			//10+40, 630+40
-			if (240 <= mouseX && mouseX <= 280 && 615 <= mouseY && mouseY <= 655) {
-				gameState = 1;
-				paintComponent(this.getGraphics());
-			}
-			if (20 <= mouseX && mouseX <= 60 && 615 <= mouseY && mouseY <= 655) {
+			if (300 <= mouseX && mouseX <= 340 && 535 <= mouseY && mouseY <= 575) {
 				songCounter++;
+				if (soundCheck == true)
+				{
+					soundCheck = false;
+				}
+				else
+				{
+					soundCheck = true;
+				}
 				if(songCounter%2==0) {
 					song.start();
 					song.loop(song.LOOP_CONTINUOUSLY);
@@ -559,6 +650,11 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				else {
 					song.stop();
 				}
+			}
+			if (65 <= mouseX && mouseX <= 295 && 17 <= mouseY && mouseY <= 52)
+			{
+				gameState = 1;
+				paintComponent(this.getGraphics());
 			}
 		}
 	}
