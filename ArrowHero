@@ -573,6 +573,13 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				healthDecrease=25;
 				gameState = 2;
 				scoreCounter = 0;
+				messages[0] = 0;
+				messages[1] = 0;
+				messages[2] = 0;
+				messages[3] = 0;
+				messages[4] = 0;
+				messages[5] = 0;
+				messages[6] = 0;
 				paintComponent(this.getGraphics());
 				
 			}
@@ -595,6 +602,13 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 				healthDecrease=25;
 				gameState = 1;
 				scoreCounter = 0;
+				messages[0] = 0;
+				messages[1] = 0;
+				messages[2] = 0;
+				messages[3] = 0;
+				messages[4] = 0;
+				messages[5] = 0;
+				messages[6] = 0;
 				paintComponent(this.getGraphics());
 				
 			}
