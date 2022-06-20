@@ -19,7 +19,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.util.*;
 import java.util.Scanner;
 
-public class arrowhero extends JPanel implements MouseListener, KeyListener, Runnable {
+public class arrowMaster extends JPanel implements MouseListener, KeyListener, Runnable {
 	
 	// Class Variables
 	public static int gameState = 0; // game states
@@ -78,10 +78,10 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	
 	public static void main(String[] args) throws IOException {
 		
-		JFrame myFrame = new JFrame("Arrowhero");
+		JFrame myFrame = new JFrame("ArrowMaster");
 
 		// Create a panel to put inside the frame
-		arrowhero myPanel = new arrowhero();
+		arrowMaster myPanel = new arrowMaster();
 		myFrame.add(myPanel);
 
 		// Maximize your frame to the size of the panel
@@ -100,7 +100,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		score3 = inputFile.next();
 	}
 
-	public arrowhero() {
+	public arrowMaster() {
 		
 		// JPanel dimensions and colour
 		setPreferredSize(new Dimension(500,682));
