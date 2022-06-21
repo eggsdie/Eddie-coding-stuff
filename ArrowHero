@@ -1,6 +1,4 @@
 
-
-
 // Necessary Imports
 import javax.swing.*;
 import java.awt.*;
@@ -19,64 +17,79 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.util.*;
 import java.util.Scanner;
 
-public class arrowMaster extends JPanel implements MouseListener, KeyListener, Runnable {
+public class arrowMaster extends JPanel implements MouseListener, KeyListener, Runnable
+{
 	
-	// Class Variables
-	public static int gameState = 0; // game states
+	// CLASS VARIABLES
+	
+	// Mouse coordinates of x position and y position
 	public static int mouseX; // gets position of x
 	public static int mouseY; // gets position of y
-	public static int health = 392; // full health of player, 392 because that is the pixel length of used rectangle
-	public static int angle = -91; // angle of the rotating object starts at -90 since we need the object to start
-	public static double count = 2; 	// to make the object move faster and faster, it is used along
-				    	// counter in order to make the object move faster after a certain ammount of spins
-	public static int counter = 1800; 	// using count, i subtract counter form count, and since count gets bigger every
-						// angle, it will take approxipately, counter/360 spins before the object moves faster
-	public static int arrow = 0;// variable for which arrowkey
-	public static LinkedList<Arrow> arrows = new LinkedList<Arrow>(); // array of unlimited length to hold currently spinning arrows
-	public static int time = 31; // used to check how long has it been since last arrow spawned
-	public static int spawnTime = 50; //500/16ms to get 2 arrows per second
-	public static int decrease = 4; // used to decrease spawntime speed, making arrows spawn faster
-	public static int scoreAddition = 1; // amount of points given to the user after each successful arrow correlation
-	public static int healthIncrease = 5; // health given back to the user after points are acheived, if the bar is not already full
-	public static int maxScore = 25; // to set a max limit speed at which arrows can move
-	public static int currentscore = 0; // counting total score of the user in 1 run
-	public static BufferedImage settings; // settings icon
-	public static BufferedImage heart; // heart icon
-	public static BufferedImage endscreen; // big arrow on end screen
-	public static BufferedImage sound;
-	public static BufferedImage exitarrow;
-	public static BufferedImage info;
-	public static BufferedImage arrowup; // up arrow
-	public static BufferedImage arrowdown; // down arrow
-	public static BufferedImage arrowleft; // left arrow
-	public static BufferedImage arrowright; // right arrow
-	public static int [] messages = new int[7];
-	public static String [] messagestext = new String [] {"Keep trying!","Unlucky!","So close!", "Looking good!", "OMG!", "Amazing!",""};
-	public static BufferedImage [] images; // an array to store all arrow variations
-	public static BufferedImage [] indication;
-	public static Scanner inputFile; // scanner to read stored highscore
-	public static PrintWriter outputFile; // to stream the new highscore into the text file
-	public static int scoreAdd = 1;
-	public static int healthDecrease = 25;
-	public static String username = "";
-	public static String name1;
-	public static String score1;
-	public static String name2;
-	public static String score2;
-	public static String name3;
-	public static String score3;
+	
+	// Game play
+	public static int gameState = 0; // <- game states
+	public static int health = 392; // <- full health of player, 392 because that is the pixel length of used rectangle
+	public static int angle = -91; // <- angle of the rotating object starts at -90 since we need the object to start
+	public static double count = 2; // <- to make the object move faster and faster, it is used along
+				    				// counter in order to make the object move faster after a
+									// certain amount of spins
+	public static int counter = 1800; // <- using count, i subtracts counter form count, and since count
+									  // gets bigger every angle, it will take approximately, counter/360
+									  // spins before the object moves faster
+	public static int arrow = 0; // <- variable for which arrow key
+	public static LinkedList<Arrow> arrows = new LinkedList<Arrow>(); // <- array of unlimited length to hold
+																	  // currently spinning arrows
+	public static int time = 31; // <- used to check how long has it been since last arrow spawned
+	public static int spawnTime = 50; // <- 500/16ms to get 2 arrows per second
+	public static int decrease = 4; // <- used to decrease spawn time speed, making arrows spawn faster
+	public static int scoreAddition = 1; // <- amount of points given to the user after each successful
+										 // arrow correlation
+	public static int healthIncrease = 5; // <- health given back to the user after points are achieved, if
+										  // the bar is not already full
+	public static int maxScore = 25; // <- to set a max limit speed at which arrows can move
+	public static int currentScore = 0; // <- counting total score of the user in 1 run
+	public static int scoreAdd = 1; // <- how much is added to scoreAddition variable after a period of time
+	public static int healthDecrease = 25; // <- how much health goes down by after being unsuccessful
+	public static String username = ""; // <- to store the user's name in a variable
+	public static int circleAnimation = 0; // <- variable to store frames when we redraw a bigger circle
+										   // (for animation reasons)
+	
+	// Images and Texts
+	public static BufferedImage settings; // <- settings icon
+	public static BufferedImage heart; // <- heart icon
+	public static BufferedImage gameLogo; // <- our game logo
+	public static BufferedImage sound; // <- sound icon
+	public static BufferedImage exitArrow; // <- arrow icon
+	public static BufferedImage info; // <- information icon
+	public static BufferedImage [] arrowImages = new BufferedImage[5]; // <- an array to store the images of
+																	   // all arrow variations
+	public static BufferedImage [] directionImages = new BufferedImage [5]; // <- an array to store the images of
+																			// all direction indicators
+	public static int [] messages = new int[7]; // <- used for added score and encouragement message pop ups
+	public static String [] messagesList = new String []
+	{"Keep trying!","Unlucky!","Bad!", "Looking good!", "Nice!", "Amazing!",""}; // <- also used for added score
+																					 // and encouragement
+																					 // message pop ups
+	
+	// High scores
+	public static Scanner inputFile; // <- scanner to read stored high score
+	public static PrintWriter outputFile; // <- to stream the new high score into the text file
+	public static String name1; // <- user name with best score
+	public static int score1; // <- score of the user name with best score
+	public static String name2; // <- user name with second best score
+	public static int score2; // <- score of the user name with second best score
+	public static String name3; // <- user name with third best score
+	public static int score3; // score of the user name with third best score
+	
+	// Music
 	public static Clip song;
-	public static AudioInputStream songInput;
-	public static int intscore1;
-	public static int intscore2;
-	public static int intscore3; 
+	public static AudioInputStream songInput; 
 	public static int songCounter = 0;
 	public static int scoreCounter = 0;
-	public static boolean soundCheck = true;
-	public static int circleAnimation = 0;
+	public static boolean soundCheck = true; // <- checks if music is currently on or off
 	
-	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException
+	{
 		
 		JFrame myFrame = new JFrame("ArrowMaster");
 
@@ -90,435 +103,478 @@ public class arrowMaster extends JPanel implements MouseListener, KeyListener, R
 		// Set the visibility of the frame to visible
 		myFrame.setVisible(true);
 		
-		// Reading the user's highscore stored in text file
+		// Reading the existing top 3 high scores from the text file
 		inputFile = new Scanner(new File("highscore.txt"));
 		name1 = inputFile.next();
-		score1 = inputFile.next();
+		score1 = Integer.parseInt(inputFile.next());
 		name2 = inputFile.next();
-		score2 = inputFile.next();
+		score2 = Integer.parseInt(inputFile.next());
 		name3 = inputFile.next();
-		score3 = inputFile.next();
+		score3 = Integer.parseInt(inputFile.next());
 	}
 
-	public arrowMaster() {
-		
-		// JPanel dimensions and colour
-		setPreferredSize(new Dimension(500,682));
+	public arrowMaster()
+	{
+		// JPanel dimensions and color
+		setPreferredSize(new Dimension(500, 682));
 		setBackground(new Color(0, 0, 0));
 		
 		this.setFocusable(true);
 		addKeyListener(this);
 		
-		try {
-			// Determining which images to use for declared BufferedImages
+		try
+		{
+			// Determining the images to use for declared BufferedImages
 			settings = ImageIO.read(new File("settingsicon.jpg"));
 			heart = ImageIO.read(new File("heart.png"));
-			endscreen = ImageIO.read(new File("endscreen.png"));
+			gameLogo = ImageIO.read(new File("endscreen.png"));
 			sound = ImageIO.read(new File("soundicon.png"));
-			exitarrow = ImageIO.read(new File("whitearrow.png"));
+			exitArrow = ImageIO.read(new File("whitearrow.png"));
 			info = ImageIO.read(new File("informationicon.png"));
-			//the arrows that are spinning 
-			images = new BufferedImage [5];
-			images[1] = ImageIO.read(new File("left.png"));
-			images[2] = ImageIO.read(new File("up.png"));
-			images[3] = ImageIO.read(new File("right.png"));
-			images[4] = ImageIO.read(new File("down.png"));
-			//the arrows that are at the top which you control to math the arrows that are spinning
-			indication = new BufferedImage [5];
-			indication[1] = ImageIO.read(new File("leftindication.png"));
-			indication[2] = ImageIO.read(new File("upindication.png"));
-			indication[3] = ImageIO.read(new File("rightindication.png"));
-			indication[4] = ImageIO.read(new File("downindication.png"));
-			//music
+			
+			// Determining the images within the arrows array
+			arrowImages[1] = ImageIO.read(new File("left.png"));
+			arrowImages[2] = ImageIO.read(new File("up.png"));
+			arrowImages[3] = ImageIO.read(new File("right.png"));
+			arrowImages[4] = ImageIO.read(new File("down.png"));
+			
+			// Determining the images within the direction indicator array
+			directionImages[1] = ImageIO.read(new File("leftindication.png"));
+			directionImages[2] = ImageIO.read(new File("upindication.png"));
+			directionImages[3] = ImageIO.read(new File("rightindication.png"));
+			directionImages[4] = ImageIO.read(new File("downindication.png"));
+			
+			// Implementing Music
 			songInput = AudioSystem.getAudioInputStream(new File("Arcade-background-music-retro-style.wav"));
 			song = AudioSystem.getClip();
 			song.open(songInput);
 			song.start();
-			song.loop(song.LOOP_CONTINUOUSLY);
-		} catch (Exception e) {
-			System.out.println("no image");
-
+			song.loop(song.LOOP_CONTINUOUSLY);	
 		}
+		
+		catch (Exception e) {}
 		
 		addMouseListener(this);
 		Thread thread = new Thread(this);
 		thread.start();
-		
 	}
-
-
-
-	public void paintComponent(Graphics g) {
-		
+	
+	public void paintComponent(Graphics g)
+	{
+		// Start Up Screen, asks for user name
 		if (gameState == 0)
 		{
+			// Background
 			super.paintComponent(g);
 			
-			g.drawImage(endscreen, 150, 200, null);
-			
-			g.setColor(new Color(255,255,255));
+			// Welcome message
+			g.setColor(new Color(255, 255, 255));
 			g.setFont(new Font("Monospaced", Font.BOLD, 40));
 			g.drawString("Welcome to", 130, 100);
 			g.drawString("Arrow Master!", 100, 140);
 			
+			// Game logo
+			g.drawImage(gameLogo, 150, 200, null);
+			
+			// User name request
 			g.setFont(new Font("Monospaced", Font.ITALIC, 17));
 			g.drawString("Please enter a username below: ", 100, 465);
-			
-			g.drawLine(190, 507, 320, 507);
-			
 			g.setFont(new Font("Monospaced", Font.BOLD, 20));
 			g.drawString(username, 245-username.length()*5, 500);
+			g.drawLine(190, 507, 320, 507);
 			
+			// Displaying further instructions once user name of at least 1 character is given
 			if (username.length() > 0)
 			{
-				g.setColor(new Color(184,15,10));
+				g.setColor(new Color(184, 15, 10));
 				g.setFont(new Font("Monospaced", Font.BOLD, 30));
 				g.drawString("Press ENTER to continue!", 35, 580);
 			}
-			
 		}
 		
 		// Menu Screen
-		else if (gameState == 1) {
-			
+		else if (gameState == 1)
+		{	
 			// Background
 			super.paintComponent(g);
 				
 			// Title
-			g.setColor(new Color(255,255,255));
+			g.setColor(new Color(255, 255, 255));
 			g.setFont(new Font("Courier", Font.BOLD, 40));
 			g.drawString("Arrow master", 105, 100);
 			
-			// Instructions
-			g.setColor(new Color(255,255,255));
-			g.setFont(new Font("Monospaced", Font.PLAIN, 20));
-			g.drawString("Press an arrow key to begin!", 80, 500);
+			// Display of all Arrows
+			g.drawImage(arrowImages[2], 210, 320, null);
+			g.drawImage(arrowImages[4], 210, 400, null);
+			g.drawImage(arrowImages[1], 130, 400, null);
+			g.drawImage(arrowImages[3], 290, 400, null);
 			
-			// Arrows
-			g.drawImage(images[2], 210, 320, null);
-			g.drawImage(images[4], 210, 400, null);
-			g.drawImage(images[1], 130, 400, null);
-			g.drawImage(images[3], 290, 400, null);
-				
-			// Settings
-			g.drawImage(settings, 230, 615, null);
-				
+			// Instructions
+			g.setColor(new Color(255, 255, 255));
+			g.setFont(new Font("Monospaced", Font.PLAIN, 20));
+			g.drawString("Press an arrow key to begin!", 80, 500);				
 						
-			// High Score
-			g.setColor(new Color(220,220,220));
+			// Top 3 High Scores
+			g.setColor(new Color(220, 220, 220));
 			g.setFont(new Font("Monospaced", Font.BOLD, 15));
 			g.drawString("HIGHSCORES", 205, 540);
 			g.setFont(new Font("Monospaced", Font.PLAIN, 15));
 			g.drawString("1. " + name1 + ": " + score1, 190, 560);
 			g.drawString("2. " + name2 + ": " + score2, 190, 575);
 			g.drawString("3. " + name3 + ": " + score3, 190, 590);
-				
 			
+			// Settings Icon
+			g.drawImage(settings, 230, 615, null);
+		}
 		
 		// Game Screen
-		} else if (gameState == 2) {
-			
+		else if (gameState == 2)
+		{
 			// Background
 			super.paintComponent(g);
 			
 			// Circle at the top
-			g.setColor(new Color(255,0,0));
+			g.setColor(new Color(255, 0, 0));
 			g.fillArc(200, 25, 100, 100, 45, 90);
-			g.setColor(new Color(0,128,255));
+			g.setColor(new Color(0, 128, 255));
 			g.fillArc(200, 25, 100, 100, 315, 90);
-			g.setColor(new Color(0,255,0));
+			g.setColor(new Color(0, 255, 0));
 			g.fillArc(200, 25, 100, 100, 135, 90);
-			g.setColor(new Color(255,255,0));
+			g.setColor(new Color(255, 255, 0));
 			g.fillArc(200, 25, 100, 100, 225, 90);
-			g.setColor(new Color(0,0,0));
+			g.setColor(new Color(0, 0, 0));
 			g.fillOval(208, 33, 84, 84);
 			
 			// Health Bar
 			g.drawImage(heart, 25, 570, null);
-			
-			g.setColor(new Color(107,0,0));
-			g.fillRect(75, 575, 400, 30); // <- dark red outline
-			
-			g.setColor(new Color(0,0,0)); // <- to make the red rectangle look like an outline
+			g.setColor(new Color(107, 0, 0));
+			g.fillRect(75, 575, 400, 30);
+			g.setColor(new Color(0, 0, 0));
 			g.fillRect(79, 579, 392, 22);
-			
-			g.setColor(new Color(186,0,0));
+			g.setColor(new Color(186, 0, 0));
 			g.fillRect(79, 579, health, 22);
 			
 			// Current Score Display
-			g.setColor(new Color(220,220,220));
-			g.setFont(new Font("Courier", Font.PLAIN, 15));
-			g.drawString("Score: " + currentscore, 215, 640);
+			g.setColor(new Color(220, 220, 220));
+			g.setFont(new Font("Courier", Font.BOLD, 18));
+			g.drawString("Score: " + currentScore, 205, 640);
 		
 			// Spawning Arrows
-			g.drawImage(indication[arrow], 225, 50, null);		
+			g.drawImage(directionImages[arrow], 225, 50, null);		
 			
-				for(int i = 0; i <arrows.size(); i++) {
-					arrows.get(i).position -= count;//this gets the position(angle) of the arrow and subtracts count to make the arrow's angle go to -440 or he top
-					g.drawImage(images[arrows.get(i).type], (int) (215 + 200 * Math.cos(arrows.get(i).position * Math.PI / 180)),
-							(int) (235 + 200 * Math.sin(arrows.get(i).position * Math.PI / 180)), this);
-					count += 0.0001; //increases speed
+				for (int i = 0; i <arrows.size(); i++)
+				{
+					// Gets the position(angle) of the arrow and subtracts count to make the arrow's
+					// angle go to -440 or he top
+					arrows.get(i).position -= count;
+					g.drawImage(arrowImages[arrows.get(i).type], (int) (215 + 200 * Math.cos(arrows.get(i).position
+					* Math.PI / 180)), (int) (235 + 200 * Math.sin(arrows.get(i).position * Math.PI / 180)), this);
 					
+					// Increases Speed
+					count += 0.0001;
 				}
 				
+				// Redraws a bigger circle as long as circleAnimation variable is larger than 0
 				if (circleAnimation > 0)
 				{
-					g.setColor(new Color(0,0,0));
+					g.setColor(new Color(0, 0, 0));
 					g.fillOval(190, 15, 120, 120);
-					
-					g.setColor(new Color(255,0,0));
+					g.setColor(new Color(255, 0, 0));
 					g.fillArc(194, 18, 112, 112, 45, 90);
-					g.setColor(new Color(0,128,255));
+					g.setColor(new Color(0, 128, 255));
 					g.fillArc(194, 18, 112, 112, 315, 90);
-					g.setColor(new Color(0,255,0));
+					g.setColor(new Color(0, 255, 0));
 					g.fillArc(194, 18, 112, 112, 135, 90);
-					g.setColor(new Color(255,255,0));
+					g.setColor(new Color(255, 255, 0));
 					g.fillArc(194, 18, 112, 112, 225, 90);
-					
-					g.setColor(new Color(0,0,0));
+					g.setColor(new Color(0, 0, 0));
 					g.fillOval(202, 27, 96, 96);
-					BufferedImage biggerIndication = new BufferedImage(64, 64, indication[arrow].getType());
+					
+					// Redraws a bigger direction image within the new circle
+					BufferedImage biggerIndication = new BufferedImage(64, 64, directionImages[arrow].getType());
 					Graphics2D g2d = biggerIndication.createGraphics();
-			        g2d.drawImage(indication[arrow], 0, 0, 64, 64, null);
+			        g2d.drawImage(directionImages[arrow], 0, 0, 64, 64, null);
 			        g2d.dispose();
 					g.drawImage(biggerIndication, 219, 40, null);
 					
+					// Decreases frames, which displays the new circle only for a short period of time
 					circleAnimation -= 1;
 				}
-				//for the length of messages, you would let the value of y keep going up until the value becomes 0 so that
-				//the text has the impression of going up and then dissapearing after 20ms
+				
+				// Displays added score each time and encouragement messages
 				for (int i = 0; i < messages.length; i++)
 				{
 					if (messages[i] > 0)
 					{
-						if(i == 6) {
-							messages[i] -= 1;//you - 1 so that the text only shows for a period of time
-							g.setColor(new Color(255,255,255));
-							g.setFont(new Font("Courier", Font.BOLD, 20));
-							g.drawString(messagestext[i], 238, 27 + messages[i]);//you add messages[i] so that they y value jumps
-						}
-						else {
+						// Added score
+						if (i == 6)
+						{
+							// Decrease by 1 so that the text only shows for a period of time
 							messages[i] -= 1;
-							g.setColor(new Color(255,255,255));
-							g.setFont(new Font("Courier", Font.PLAIN, 20));
-							g.drawString(messagestext[i], 200, 200 + messages[i]);
+							
+							// For the length of messages, you would let the value of y keep going up
+							// until the value becomes 0, so that the text has the impression of
+							// going up and then disappearing after 30ms
+							g.setColor(new Color(255, 255, 255));
+							g.setFont(new Font("Courier", Font.BOLD, 20));
+							g.drawString(messagesList[i], 238, 27 + messages[i]);
 						}
 						
+						// Encouragement messages
+						else
+						{
+							// Decrease by 1 so that the text only shows for a period of time
+							messages[i] -= 1;
+							
+							// For the length of messages, you would let the value of y keep going up
+							// until the value becomes 0, so that the text has the impression of
+							// going up and then disappearing after 30ms
+							g.setColor(new Color(255, 255, 255));
+							g.setFont(new Font("Monospaced", Font.PLAIN, 22));
+							g.drawString(messagesList[i], 200, 200 + messages[i]);
+						}
 					}
 				}
+				
+			counter -= count;
 			
-				
-				
-			counter -= count; 
-			//makes score and spawntime more/faster
-			if (counter < 0) {
-				if(scoreAddition>maxScore) {
-					scoreAdd=0;
+			// Increases added score, makes spawn time faster
+			if (counter < 0)
+			{
+				if (scoreAddition>maxScore)
+				{
+					scoreAdd = 0;
 				}
-
 				counter = 1800;
 				spawnTime-=decrease;
-				if(spawnTime < 14) {
+				
+				if (spawnTime < 14)
+				{
 					spawnTime = 14;
 					decrease = 0;
 				}
-				//makes health increase and decrease faster
-				healthIncrease+=5;
-				scoreAddition+=scoreAdd;
+				
+				// Makes health increase and decrease faster
+				healthIncrease += 5;
+				scoreAddition += scoreAdd;
 				scoreAdd++;
-				healthDecrease+=10;
+				healthDecrease += 10;
 			}
 		}
 		
 		// Game Over Screen
-		else if (gameState == 3) {
+		else if (gameState == 3)
+		{
+			// Background
 			super.paintComponent(g);
 			
-			g.setColor(new Color(255,255,255));
-			g.setFont(new Font("Courier", Font.BOLD, 20));
-			g.drawString("Great Job! You scored a total of " + currentscore, 30, 150);
-			g.drawString("Highscore: " + intscore1, 165, 450);
-			g.drawString("Press space bar to restart!", 90, 600);
-			g.drawString("Press escape key to go to the menu!", 50, 650);
-			g.drawImage(endscreen, 150, 200, null);
+			// Display of final score
+			g.setColor(new Color(255, 255, 255));
+			g.setFont(new Font("Courier", Font.BOLD, 18));
+			g.drawString("Great Job!", 195, 100);
+			g.setFont(new Font("Courier", Font.PLAIN, 18));
+			g.drawString("You scored a total of...", 125, 130);
+			g.setFont(new Font("Courier", Font.BOLD, 22));
+			g.drawString(currentScore + " points", 190, 170);
 			
+			// Game logo
+			g.drawImage(gameLogo, 150, 200, null);
+			
+			// Display of game high score
+			g.drawString("Highscore: " + score1, 155, 450);
+			
+			// Next Instructions
+			g.setColor(new Color(220, 220, 220));
+			g.setFont(new Font("Monospaced", Font.BOLD, 18));
+			g.drawString("Press space bar to restart!", 90, 550);
+			g.drawString("Press escape key to go to the menu!", 50, 585);
 		}
 		
-		// Game Paused Screen
+		// Settings and Information Screen
 		else if(gameState == 4) {
 			
+			// Background
 			super.paintComponent(g);
 			
-			g.setColor(new Color(255,255,255));
+			// Return to menu
+			g.setColor(new Color(255, 255, 255));
 			g.drawRect(65, 17, 230, 35);
-			g.drawImage(exitarrow, 20, 20, null);
+			g.drawImage(exitArrow, 20, 20, null);
 			g.setFont(new Font("Courier", Font.BOLD, 20));
 			g.drawString("BACK TO MENU (ESC)", 75, 40);
 			
+			// About this game
 			g.drawImage(info, 100, 100, null);
-			
-			g.setColor(new Color(255,255,255));
+			g.setColor(new Color(255, 255, 255));
 			g.setFont(new Font("Monospaced", Font.BOLD, 20));
 			g.drawString("About this game", 170, 130);
-			
 			g.setFont(new Font("Monospaced", Font.BOLD, 14));
 			g.drawString("Arrow hero is a minimalist game where ", 110, 185);
 			g.drawString("your goal is to match a continuous ", 110, 210);
-			
-			g.setColor(new Color(254,32,32));
+			g.setColor(new Color(254, 32, 32));
 			g.drawString("unstoppable stream of arrows ", 110, 235);
-			g.setColor(new Color(255,255,255));
+			g.setColor(new Color(255, 255, 255));
 			g.drawString("using ", 365, 235);
 			g.drawString("your keyboard keys.", 110, 260);
-			
 			g.drawString("This means that if you have more than ", 110, 310);
 			g.drawString("one consecutive ", 110, 335);
-			g.setColor(new Color(254,32,32));
+			g.setColor(new Color(254, 32, 32));
 			g.drawString("up ", 250, 335);
-			g.setColor(new Color(255,255,255));
+			g.setColor(new Color(255, 255, 255));
 			g.drawString("arrow you only have ", 273, 335);
 			g.drawString("have to press the ", 110, 360);
-			g.setColor(new Color(254,32,32));
+			g.setColor(new Color(254, 32, 32));
 			g.drawString("up ", 268, 360);
-			g.setColor(new Color(255,255,255));
+			g.setColor(new Color(255, 255, 255));
 			g.drawString("once to ", 294, 360);
 			g.drawString("validate both.", 110, 385);
-			
 			g.drawString("Made by ", 110, 435);
-			g.setColor(new Color(254,32,32));
+			g.setColor(new Color(254, 32, 32));
 			g.drawString("Demir ", 180, 435);
-			g.setColor(new Color(255,255,255));
+			g.setColor(new Color(255, 255, 255));
 			g.drawString("and ", 233, 435);
-			g.setColor(new Color(254,32,32));
+			g.setColor(new Color(254, 32, 32));
 			g.drawString("Eddie ", 268, 435);
-			g.setColor(new Color(255,255,255));
+			g.setColor(new Color(255, 255, 255));
 			g.drawString(".", 312, 435);
 			
+			// Turn music on and off
 			g.setFont(new Font("Courier", Font.PLAIN, 22));
 			g.drawString("Music ON/OFF:", 110, 560);
-			
 			g.drawImage(sound, 300, 535, null);
 			
 			if (soundCheck == false)
 			{
-				g.setColor(new Color(255,255,255));
+				g.setColor(new Color(255, 255, 255));
 				g.drawLine(300, 535, 340, 575);
 				g.drawLine(300, 575, 340, 535);
 			}
-	
 		}
-
 	}
 
-
-
-	public void run() {
-		while (true) {
+	public void run()
+	{
+		while (true)
+		{
 			repaint();
-			try {
-			
-				Thread.sleep(16); // The commands after while(true) but before try will execute once every 80 milliseconds
+			try
+			{
+				// The commands after while(true) but before try will execute once every 80 milliseconds
+				Thread.sleep(16);
 				
-				if (gameState == 2) {
-					
-			
-						// Checking if a new arrow can spawn yet
-						if(time>=spawnTime) {
-							arrows.add(new Arrow(angle, ((int)(Math.random()*(4-1+1))+1)));
-							time = 0; //once time is greater than spawnTime, a random arrow will be added to the linkedlist with a position of -90, 
-							//and a random type of arrow(1-4)
+				// Game Screen
+				if (gameState == 2)
+				{
+					// Checking if a new arrow can spawn yet
+					if(time >= spawnTime)
+					{
+						arrows.add(new Arrow(angle, ((int)(Math.random()*(4 - 1 + 1)) + 1)));
+						time = 0;
+						// Once time is greater than spawnTime, a random arrow will be added to the
+						// linked list with a position of -90, and a random type of arrow(1-4)
+					}
+						
+					// Time adds by 1 every 16ms
+					time++;
+						
+					// If the linkedlist's first value of arrow has a position(angle) of -440 which is -90 + -360
+					if(!arrows.isEmpty() && arrows.peek().position <= -440)
+					{
+						// If the linkedlist's first value of arrow has a type which is equal to
+						// the arrow that is clicked, score is added
+						if(arrows.peek().type == arrow)
+						{
+							scoreCounter++;		
+							currentScore += scoreAddition;
+							// Every 5 correct arrows clicked, a special message is displayed
+							if(scoreCounter==5)
+							{
+								messages[(int)(Math.random()*(5-3+1))+3] = 30;
+								scoreCounter = 0;
+							}
+								
+							// To determine the added score that will be displayed at the top, and its frames
+							messagesList[6]= "+" + scoreAddition;
+							messages[6] = 20;
+							
+							// Health is also added if successful 
+							if(health < 392)
+							{
+								health = Math.min(health + healthIncrease, 392);
+									
+							}									
 						}
 						
-						time++; //time adds by 1 every 16ms
+						// If unsuccessful, health is decreased and you get a bad message
+						else
+						{
+							health -= healthDecrease;
+							messages[(int)(Math.random()*(2 - 0 + 1)) + 0] = 30;
+						}
+							
+						// Resizing the circle at the top every time it collides with an arrow
+						circleAnimation = 10;
+							
+						// Deletes the first value of the LinkedList now that it has been checked
+						arrows.poll();
+					}
 						
-						// Giving score and health if entered arrow matches
-						//if the linkedlist's first value of arrow has a position(angle) of -440 which is -90+-360
-						if(!arrows.isEmpty()&& arrows.peek().position<=-440) {
-							if(arrows.peek().type == arrow) {//if the linkedlist's first value of asrrow has a type which is equal to the arrow that you click
-								scoreCounter++;
-								currentscore+= scoreAddition;//you will add score
-								if(scoreCounter==5) {//every 5 correct arrows you get, you get a special message
-									messages[(int)(Math.random()*(5-3+1))+3] = 20;
-									scoreCounter = 0;
-								}
-								
-								messagestext[6]= "+"+scoreAddition; //says the score addition in the top
-								messages[6] = 20;
-								if(health < 392) {
-									health = Math.min(health + healthIncrease, 392);
-									
-								}
-								
-								
-							}
-							else {
-								health-=healthDecrease;
-								messages[(int)(Math.random()*(2-0+1))+0] = 20; //if you get something wrong, you get a bad message
-								
-							}
-							
-							circleAnimation = 10;
-							
-							arrows.poll(); // deleting the first value of the LinkedList, no that it has been checked
+					// If user runs out of health then game over and check high scores
+					if (health < 0)
+					{						
+						// Checks if achieved score is bigger than the first high score
+						if (currentScore > score1)
+						{
+							name3 = name2;
+							score3 = score2;
+							name2 = name1;
+							score2 = score1;
+							name1 = username;
+							score1 = currentScore;
 						}
 						
-						// Game Over if the user runs out of health
-						if (health < 0) {
-							//top 3 highscore
-							intscore1 = Integer.parseInt(score1);
-							intscore2 = Integer.parseInt(score2);
-							intscore3 = Integer.parseInt(score3);
-									
-							
-							if (currentscore > intscore1) //check if highscore is bigger than first highscore
-							{
-								name3 = name2;
-								intscore3 = intscore2;
-								name2 = name1;
-								intscore2 = intscore1;
-								name1 = username;
-								intscore1 = currentscore;
-							}
-							else if (currentscore > intscore2)//check if highscore is bigger than second highscore
-							{
-								name3 = name2;
-								intscore3 = intscore2;
-								name2 = username;
-								intscore2 = currentscore;
-							}
-							else if (currentscore > intscore3)//check if highscore is bigger than third highscore
-							{
-								name3 = username;
-								intscore3 = currentscore;
-							}
-							score1 = ""+intscore1;
-							score2 =""+ intscore2;
-							score3 =""+ intscore3;
-							//outputs highscore
-							
-							outputFile = new PrintWriter(new FileWriter("highscore.txt"));
-							outputFile.println(name1 + " " + intscore1);
-							outputFile.println(name2 + " " + intscore2);
-							outputFile.println(name3 + " " + intscore3);
-							outputFile.close();	
+						// Checks if the achieved score is bigger than second high score
+						else if (currentScore > score2)
+						{
+							name3 = name2;
+							score3 = score2;
+							name2 = username;
+							score2 = currentScore;
+						}
 						
-							gameState = 3;
-						}	
-					
+						// Checks if the achieved score is bigger than third high score
+						else if (currentScore > score3)
+						{
+							name3 = username;
+							score3 = currentScore;
+						}
+	
+						// Outputs updated high score variables into highscore text file
+						outputFile = new PrintWriter(new FileWriter("highscore.txt"));
+						outputFile.println(name1 + " " + score1);
+						outputFile.println(name2 + " " + score2);
+						outputFile.println(name3 + " " + score3);
+						outputFile.close();	
+						
+						// Go to end screen
+						gameState = 3;
+					}		
 				}
 			}
 			
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				e.printStackTrace();
 			}
-
 		}
 	}
 
-	public void keyPressed(KeyEvent e) {
-		//to enter username
+	public void keyPressed(KeyEvent e)
+	{
+		// To collect user name
 		if (gameState == 0)
 		{
+			// Stores entered user name into 'username' variable
 			if (e.getKeyCode() >= 65 && e.getKeyCode() <= 90)
 			{
 				if (username.length() <= 9)
@@ -527,54 +583,57 @@ public class arrowMaster extends JPanel implements MouseListener, KeyListener, R
 				}
 			}
 			
+			// Deleted last character if the user wants to backspace
 			if (e.getKeyCode() == 8 && username.length() > 0)
 			{
 				username = username.substring(0, username.length()-1);
 			}
 			
+			// Heads to menu screen if the user has entered a name of at least 1 character
 			if (username.length() > 0 && e.getKeyCode() == 10)
 			{
 				gameState = 1;
 			}
-			
 		}
 		
-		
-		// Switching over to game screen if any arrowkey is pressed
-		if(gameState == 1) {
-			if(e.getKeyCode() > 36 && e.getKeyCode() <41) {
+		// Switches to game screen if an arrow key is pressed
+		if(gameState == 1)
+		{
+			if (e.getKeyCode() > 36 && e.getKeyCode() <41)
+			{
 				gameState = 2;
 			}
 		}
 		
-		// Reading the entered arrow key of the user
-		if(gameState == 2) {
-			if(e.getKeyCode() == 32) {
-				gameState = 4;
-			}
-			if (e.getKeyCode() >= 37 && e.getKeyCode() <= 40) {
+		// Reading the direction of arrow entered by the user
+		if(gameState == 2)
+		{
+			if (e.getKeyCode() >= 37 && e.getKeyCode() <= 40)
+			{
 				arrow = e.getKeyCode() - 36;
-				
 			}
-			
 		}
 		
-		//this resets all of the variables so that the game gets a fresh start
-		if(gameState == 3) {
-			if (e.getKeyCode()==32) {
+		// Resets all of the variables so that the game gets a fresh start
+		if(gameState == 3)
+		{
+			// Returns to game screen if space bar is pressed
+			if (e.getKeyCode() == 32)
+			{
+				gameState = 2;
+				
 				count = 2;
 				counter = 1800; 
 				health = 392;
-				spawnTime = 50;//500/16ms to get 2 per second
+				spawnTime = 50;
 				decrease = 4;
 				scoreAddition = 1;
-				currentscore = 0;
+				currentScore = 0;
 				time = 31;
 				healthIncrease = 5;
 				arrows.clear();
 				arrow=1;
-				healthDecrease=25;
-				gameState = 2;
+				healthDecrease = 25;
 				scoreCounter = 0;
 				messages[0] = 0;
 				messages[1] = 0;
@@ -584,26 +643,27 @@ public class arrowMaster extends JPanel implements MouseListener, KeyListener, R
 				messages[5] = 0;
 				messages[6] = 0;
 				paintComponent(this.getGraphics());
-				
 			}
 		}
 		
-//back to menu screen
-		//this resets all of the variables so that the game gets a fresh start
-		if(gameState == 3) {
-			if(e.getKeyCode() == 27) {
+		// Resets all of the variables so that the game gets a fresh start
+		if(gameState == 3)
+		{
+			// Returns to menu screen if escape key is pressed
+			if(e.getKeyCode() == 27)
+			{
 				count = 2;
 				counter = 1800; 
 				health = 392;
-				spawnTime = 50;//500/16ms to get 2 per second
+				spawnTime = 50;
 				decrease = 4;
 				scoreAddition = 1;
-				currentscore = 0;
+				currentScore = 0;
 				time = 31;
 				healthIncrease = 5;
 				arrows.clear();
 				arrow=0;
-				healthDecrease=25;
+				healthDecrease = 25;
 				gameState = 1;
 				scoreCounter = 0;
 				messages[0] = 0;
@@ -614,10 +674,10 @@ public class arrowMaster extends JPanel implements MouseListener, KeyListener, R
 				messages[5] = 0;
 				messages[6] = 0;
 				paintComponent(this.getGraphics());
-				
 			}
 		}
-		//if you press escape you go back to starting menu
+		
+		// Returns to menu screen if escape key is pressed while in settings screen
 		if (gameState == 4)
 		{
 			if (e.getKeyCode() == 27)
@@ -625,39 +685,47 @@ public class arrowMaster extends JPanel implements MouseListener, KeyListener, R
 				gameState = 1;
 			}
 		}
-		
 	}
 	
 	// Setting up arrow data structure for the angle of the arrow as well as the type of arrow
 	public static class Arrow {
 		
-		// x pos is radius * cossine of angle
-		// y pos is the radius * sine of the angle
+		// x position is radius * cossine of angle
+		// y position is the radius * sine of the angle
 		
 		float position;
 		int type;
 		
-		public Arrow (float px, int tx) {
-			position = px; //the angle, which starts at -90 (top of the screen)
-			type = tx;//can be 1-4, which is up, down, left, right
+		public Arrow (float px, int tx)
+		{
+			position = px; // <- the angle, which starts at -90 (top of the screen)
+			type = tx; // <- can be 1-4, which is up, down, left, right
 		}
 	}
 	
-	// This method is used to start the game if the user clicks anywhere on the menu screen
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent e)
+	{
+		// Collects x and y coordinates of point pressed with mouse
 		mouseX = e.getX();
 		mouseY = e.getY();
-		if (gameState == 1) {
-			//10+40, 630+40
-			//240, 615
-			if (240 <= mouseX && mouseX <= 280 && 615 <= mouseY && mouseY <= 655) {
+		
+		// If in menu screen
+		if (gameState == 1)
+		{
+			// Switches to settings screen if settings icon is pressed
+			if (240 <= mouseX && mouseX <= 280 && 615 <= mouseY && mouseY <= 655)
+			{
 				gameState = 4;
 				paintComponent(this.getGraphics());
 			}
 		}
-		else if (gameState == 4) {
-			//to turn on or off the sound
-			if (300 <= mouseX && mouseX <= 340 && 535 <= mouseY && mouseY <= 575) {
+		
+		// If in settings screen
+		else if (gameState == 4)
+		{
+			// Turning sound on and off if sound icon is pressed
+			if (300 <= mouseX && mouseX <= 340 && 535 <= mouseY && mouseY <= 575)
+			{
 				songCounter++;
 				if (soundCheck == true)
 				{
@@ -667,18 +735,24 @@ public class arrowMaster extends JPanel implements MouseListener, KeyListener, R
 				{
 					soundCheck = true;
 				}
-				if(songCounter%2==0) {
+				if(songCounter % 2 == 0)
+				{
 					song.start();
 					song.loop(song.LOOP_CONTINUOUSLY);
 				}
-				else {
+				else
+				{
 					song.stop();
 				}
 			}
-	
+			
+			// Returns to game screen if "back to menu" button is pressed
+			if (20 <= mouseX && mouseX <= 295 && 17 <= mouseY && mouseY <= 52)
+			{
+				gameState = 1;
+			}
 		}
 	}
-	
 	
 	// Useless Methods
 	public void keyTyped(KeyEvent e) {}
@@ -687,6 +761,4 @@ public class arrowMaster extends JPanel implements MouseListener, KeyListener, R
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
-
-	
 }
